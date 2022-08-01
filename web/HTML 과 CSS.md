@@ -1,5 +1,7 @@
 # HTML 과 CSS
 
+[markup 보조자료](https://github.com/DooDoo3804/Study/blob/master/web/markdown.md)
+
 ### 웹 사이트의 구성 요소
 
 - HTML : 구조
@@ -278,5 +280,5 @@ ___
 
 - sticky 스크롤에 따라 static에서 fixed로 바뀜
 
-[markup 보조자료](https://github.com/DooDoo3804/Study/blob/master/web/HTML%20%EA%B3%BC%20CSS.md/markdown_보조자료.md)
+
 
