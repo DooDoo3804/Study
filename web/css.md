@@ -40,6 +40,22 @@ flex-direction: column; <!--수직 배열의 경우-->
 flex-direction: column-reverse; <!--아래부터 위로 수직 배열-->
 ```
 
+##### flex-flow
+
+```html
+flex-flow: (정렬방법) (줄바꿈)
+flex-flow: row wrap <!--가로 정렬해서 줄 바꿈 가능-->
+flex-flow: row wrap-reverse <!--줄 바꿈을 반대로 가능-->
+```
+
+##### align-content
+
+```html
+align-content: flex-start <!--전부 위로 정렬-->
+```
+
+
+
 ### 색상 불투명도
 
 ```html
