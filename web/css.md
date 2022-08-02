@@ -11,6 +11,16 @@ flex-direction: row;
 flex-direction: column; <!--수직 배열의 경우-->
 ```
 
+##### justify-content
+
+```html
+justify-content : flex-start <!--default값 컨테이너 왼쪽으로 정렬-->
+justify-content : flex-end <!--컨테이너 오른쪽으로 정렬-->
+justify-content : center <!--컨테이너 가운데로 정렬-->
+justify-content : space-between <!--요소들 사이 동일한 간격-->
+justify-content : space-around <!--요소들 주위에 동일한 간격-->
+```
+
 ### 색상 불투명도
 
 ```html
