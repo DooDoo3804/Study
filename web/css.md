@@ -92,5 +92,26 @@ display: inline-block  <!--기본적으로 컨테이너는 box 성질 box는 공
 bertical-align: top <!--content 배치를 위로 끌어올린다-->
 ```
 
+### 이미지 잘라서 background 넣기
 
+css 파일에 아래와 같은 코드를 입력한다.
+
+```html
+header{
+	background-image: url('...');
+	background-size: cover;
+	height: 500px;
+	width: auto;
+} <!--css에서 링크 삽입할 때 html과 경로가 다름을 주의-->
+```
+
+### OFFSET
+
+```html
+offset-2
+<!--offset을 설정하면 초기 값을 갖고 시작한다
+만약 부모에서 설정하면 모든 row와 column이 offset을 갖고 있다.
+개별로 설정하면 세밀하게 움직일 수 있다-->
+
+```
 
