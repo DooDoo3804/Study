@@ -10,6 +10,7 @@ for _ in range(n):
 move_list = [[-1, 0], [0, 1], [1, 0], [0, -1]]
 
 def turn_left():
+    global direction
     direction -= 1
     if direction == -1:
         direction =3
@@ -26,6 +27,7 @@ while True:
         x = nx
         y = ny
         count += 1
+        print(count)
     elif turn_count >= 4:
         x += move_list[direction-2][1]
         y += move_list[direction-2][0]
