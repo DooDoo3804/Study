@@ -81,7 +81,7 @@ opacity: 80%;
 
 ### input
 
-##### palceholder
+##### placeholder
 
 ```html
 input(placeholder="입력 값") <!--"입력 값"을 유지하고 있다가 입력을 하면 사라진다-->

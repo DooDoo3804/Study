@@ -176,7 +176,7 @@ footer : 문서 전체나 섹션의 푸터(마지막 부분)
 
 label을 클릭하여 input자체의 초점을 맞추거나 활성화 시킬 수 있음
 
-`<input>`에 id 속성을 `<label>`에는 for 속성을 활용하여 상효 연관 시킴
+`<input>`에 id 속성을 `<label>`에는 for 속성을 활용하여 상호 연관 시킴
 
 ```html
 <label for="agreement">개인정보</label>

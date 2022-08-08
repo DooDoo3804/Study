@@ -27,7 +27,7 @@
   - e end
   - x 양옆(좌우)
   - y 상하
-  - blank 모든방향
+  - (blank) 모든방향
 - size (1rem = 16px)
   - 0 0
   - 1 - 0.25rem
