@@ -1,6 +1,5 @@
 # 5432_쇠막대기_자르기
 # 2022-08-16
-import pprint
 import sys
 sys.stdin = open('input.txt', 'r')
 T = int(input())
@@ -23,16 +22,19 @@ for t in range(1, 1+T):
             result.append(st_pipe)
             st_pipe -= 1
             i += 1
-    count = 0
-    max_pipe = 0
-    for v in result :
-        count += 1
-        if max_pipe < v:
-            max_pipe = v
-    pipe_line = [[0] * count for _ in range(max_pipe+1)]
-    for i, v in enumerate(result):
-        pipe_line[max_pipe-v][i] = 1
-    # 맨 밑에 r 그 위로 1층 부터
-    pprint.pprint(pipe_line)
-    print(result)
+    stack = [0]
+    count = multi = 0
+    for pipe in result:
+        if pipe == 0:
+            count += multi
+            continue
+        elif stack[-1] == pipe:
+            multi -= 1
+            stack.pop()
+        else:
+            count += 1
+            multi += 1
+            stack.append(pipe)
+    print('#{} {}' .format(t, count))
+
 
