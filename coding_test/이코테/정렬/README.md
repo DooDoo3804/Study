@@ -55,3 +55,38 @@ print(array)
 
 ​	큰 숫자와 작은 숫자를 교환할 때, 교환하기 위한 기준
 
+```python
+array = [7, 5, 9, 0, 3, 1, 6, 2, 4, 8]
+def quick_sort(array):
+    if len(array)<1:
+    	return array
+    pivot = array[0]
+    tail = array[1:]
+    
+    left_side = [x for x in tail if x <= pivot]
+    right_side = [x for x in tail if x > pivot]
+    return quick_sort(left_side) + [pivot] + quick_sort(right_side)
+print(quick_sort(array))
+```
+
+시간 복잡도 O(NlogN)
+
+
+
+## 계수 정렬 (Count Sort)
+
+> 조건만 맞으면 매우 빠른 정렬
+
+최악의 경우에도 시간 복잡도 O(N+K)
+
+정수로 딱 떨어지는 경우 각 숫자가 몇 번 나왔는지 횟수를 센 다음 이를 계수에 맞게 한번에 출력한다
+
+```python
+array = [7, 5, 9, 0, 3, 1, 6, 2, 9, 1, 4, 8, 0, 5, 2]
+count = [0] * (max(array) + 1)
+for i in range(len(array)):
+    count[array[i]] += 1
+for i in range(len(count)):
+    for j in range(count[i]):
+        print(i, end=' ')
+```
