@@ -48,8 +48,6 @@ django-admin startproject firstpjt # 폴더 구조 안에 프로젝트 생성
 python manage.py runserver# 프로젝트 실행
 # 실행하면 http://127.0.0.1:8000/ 생성
 python manage.py createsuperuser # 프로젝트 실행
-
-
 ```
 
 ### 프로젝트 구조
