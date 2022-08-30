@@ -4,7 +4,7 @@
 
 ctrl + shift + p
 
-```
+```json
     // Django
     "files.associations": {
         "**/*.html": "html",
@@ -104,6 +104,8 @@ TIME_ZONE = 'Seoul/Asia' # 시간 변경
 ```
 python manage.py startapp {앱이름} # articles 앱 이름은 복수형으로
 ```
+
+
 
 ##### 필수
 
