@@ -188,10 +188,16 @@ def <탬플릿이름>(request):
 - view에 throw 탬플릿 생성
 
 ```django
-<form action="<catch로 이동 경로>" method="GET">
+<form action="<catch로 이동 경로>" method="POST/GET">
     <input name="<들어가는 변수 이름>"> # 주소 뒤에 다음이 붙음 ?<변수이름>=<>
 </form>
 ```
+
+> GET방식은 데이터가 주소에 노출됨 / 보안에 취약
+>
+> POST는 데이터를 hash 값으로 바꿔서 전송 token을 필요로 함
+>
+> ​	데이터를 받을 때 GET이면 GET.get()으로 POST면 POST.get()으로 받는다	
 
 - catch.html 생성
 - view에 catch 탬플릿 생성
@@ -232,3 +238,24 @@ class Article(models.Model):
 create_at = models.DateTimeField(auto_now_add=True) # 최초의 생성 일자 자동으로 초기화
 update_at = models.DateTimeField(auto_now=True) # 데이터가 수정될 때 마다 자동으로 초기화
 ```
+
+
+
+#### 주소작성
+
+```django
+"{% url "주소:(함수및탬플릿)" <함수에서 변수가 필요한 경우 작성>%}"
+```
+
+#### redirect
+
+>  주소를 종속관계가 아닌 주소로 보냄
+
+#### admin
+
+```
+python manage.py createsuperuser
+# 이메일 작성 안해도 괜찮다
+```
+
+이후 주소 (......).8000/admin 으로 접근 가능
