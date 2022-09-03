@@ -26,3 +26,19 @@
 
   
 
+### 이진 탐색
+
+---
+
+[이진 탐색](https://github.com/DooDoo3804/Study/tree/master/coding_test/%EC%9D%B4%EC%BD%94%ED%85%8C/%EC%9D%B4%EC%A7%84%ED%83%90%EC%83%89)	_(0824)_
+
+
+
+### 다이나믹 프로그램
+
+---
+
+[다이나믹 프로그램](https://github.com/DooDoo3804/Study/tree/master/coding_test/%EC%9D%B4%EC%BD%94%ED%85%8C/%EB%8B%A4%EC%9D%B4%EB%82%98%EB%AF%B9%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D)	_(0829)_
+
+
+
