@@ -16,6 +16,14 @@ built-in이 진행되면 바꾸기 매우 어렵기 때문에 이를 바꾸고 �
 
 DB를 초기화 하고 진행해야함
 
+### settings.py
+
+pjt settings에 추가
+
+```python
+AUTH_USER_MODEL = '<모델명>.User'
+```
+
 
 
 ### account/admin.py
@@ -62,6 +70,33 @@ def login(request):
 
 
 
+### Login
+
+urls에 작성 이후
+
+html생성 작성 이후
+
+views 작성(아래)
+
+```python
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login as auth_login
+def login(request):
+    if request == "POST":
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            auth_login(request, form.get_user())
+            return redirect('articles:index')
+    else:
+        form = AuthenticationForm()
+    context = {
+        'form' : form
+    }
+    return render(requqest, 'accounts/login.html', context)
+```
+
+
+
 ### 로그인 되어있는 유저의 정보 출력
 
 html에서 또는 base.html에서 `{{ user }}` 으로 출력 가능
@@ -90,14 +125,15 @@ html에서 views함수 호출하면 된다. POST 방식으로 제출
 login페이지와 동일함
 
 ```python
+from .forms import CustonUserCreationForm, CustonUserChangeForm
 def signup(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("articles:index")
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     context = {
         'form' : form
     }
@@ -111,17 +147,19 @@ def signup(request):
 이후 UserChangeForm 역시 바꿔주어야 함
 
 ```python
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model #직접 참조하지 않고 get_user_model을 통해 가져옴
 
 class CustonUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
         fields = UserCreationForm.Meta.fields + ('email',) # 필요한 필드는 이와 같이 추가 가능
-class CustonUserChangeForm(UserChangeForm()):
+class CustonUserChangeForm(UserChangeForm:
     class Meta(UserChangeForm.Meta):
         model = get_user_model()
 ```
+
+Custom 이 붙은 재정의된 form으로 사용
 
 #### 회원가입 이후 바로 로그인 해주기
 
@@ -154,6 +192,8 @@ auth_logout(request)
 
 계속 같은 방법으로 작성하면 된다 
 
+회원 정보 같은 경우 form field에서 `'__all__'`을 하면 모든 필드를 불러와서 적합하지 않음으로 field를 재정의 해주어야 함
+
 ```python
 def update(request):
     if request.method == "POST":
@@ -169,6 +209,13 @@ def update(request):
     return render(request, 'accounts/update.html', context)
 ```
 
+```python
+class CustonUserChangeForm(UserChangeForm:
+    class Meta(UserChangeForm.Meta):
+        model = get_user_model()
+        field = ('email', 'first_name', 'last_name') # 필요한 field를 골라서 작성
+```
+
 
 
 ### 비밀번호 변경
@@ -176,6 +223,7 @@ def update(request):
 비밀번호는 암호화의 과정이 필요하기 때문에 회원 정보 수정과는 다른 작업이 필요하다
 
 ```python
+from django.contrib.auth import update_session_auth_hash
 def change_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
@@ -191,7 +239,7 @@ def change_password(request):
     return render(request, 'accounts/change_password.html', context)
 ```
 
-비밀번호를 바꾸면 세션이 바뀌기 때문에 로그인이 풀린다
+비밀번호를 바꾸면 세션이 바뀌기 때문에 로그인이 풀린다 / 기존의 정보와 다르기 때문
 
 update_session_auth_hash()를 사용하여 세션을 바꿔준다
 
