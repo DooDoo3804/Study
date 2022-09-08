@@ -210,6 +210,8 @@ delete위에 작성
 
 pip install하고 settings에 추가
 
+`pip install django-bootstrap-v5`
+
 ```python
 {% load bootstrap5 %}
   <h2>bootstrap v5 사용</h2>
