@@ -142,7 +142,7 @@ ALTER table new_contracts ADD COLUMN address TEXT NOT NULL DEFAULT 'default_data
 ALTER table new_contracts DROP COLUMN address;
 
 DROP TABLE table_name;
---테이블 자체를 지워버림
+--테이블 존재 자체를 지워버림
 --복구가 불가능
 ```
 
