@@ -333,5 +333,194 @@ def delete :
 from django.http import HttpResponseForbidden
 ```
 
+------
 
 
+
+### M:N (Articles:User)
+
+- models.py
+
+```python
+user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_articles')
+```
+
+위의 코드를 작성한다면 역참조의 이름이 같아지기 때문에 related_name으로 역참조의 이름을 바꿔야함 (보통 M:N에서 바꿔줌)
+
+- - article.user
+    - 게시글을 작성한 유저 - N:1
+  - user.article_set
+    - 유저가 작성한 게시글(역참조) - N:1
+  - article.like_users
+    - 게시글을 좋아요한 유저 - M:N
+  - user.like_articles
+    - 유저가 좋아요한 게시글(역참조) - M:N
+
+
+
+- articles/urls.py
+
+  - ```python
+    urlpatterns=[
+    	...
+    	path('<int:article_pk>/likes/', views.likes, name='likes'),
+    ]
+    ```
+
+- articles/views.py
+
+  - ```python
+    def likes(request, article_pk):
+        article = Article.objects.get(pk=article_pk)
+        if request.user in article.like_users.all():
+            article.like_users.remove(request.user)
+        else:
+            article.like_users.add(request.user)
+        return redirect('articles:index')
+    ```
+
+```pyhton
+if article.like_users.filter(pk=article_pk).exists():
+```
+
+.filter().exists() 를 사용하면 많은 데이터에서 빠른 결과를 불러올 수 있음 / True / False 반환
+
+- index.html
+
+  - ```html
+    <div>
+        <form action="{% url 'articles:likes' article.pk %}" method="POST">
+            {% csrf_token %}
+            {% if request.user in article.like_users.all %}
+            <input type="submit" value="좋아요 취소">
+            {% else %}
+            <input type="submit" value="좋아요">
+            {% endif %}
+        </form>
+    </div>
+    ```
+
+------
+
+
+
+### M:N (User:User)
+
+- accounts/urls.py
+
+  - ```python
+    path('profile/<str:username>', views.profile, name='profile'),
+    ```
+
+- accounts/views.py
+
+  - ```python
+    def profile(request, username):
+        User = get_user_model()
+        person = User.objects.get(username=username)
+        context = {
+            'person' : person
+        }
+        return render(request, 'accounts/profile.html', context)
+    ```
+
+- profile.html
+
+  - ```html
+    {% extends 'base.html' %}
+    
+    {% block content %}
+        <h1>{{ person.username }}의 프로필</h1>
+        <hr>
+    
+        <h2>{{ person.username }}이 작성한 게시글</h2>
+        {% for article in person.article_set.all %}
+            <div>{{ article.title }}</div>
+        {% endfor %}
+        <hr>
+    
+        <h2>{{ person.username }}이 작성한 댓글</h2>
+        {% for comment in person.comment_set.all %}
+            <div>{{ comment.content }}</div>
+        {% endfor %}
+        <hr>
+    
+        <h2>{{ person.username }}이 좋아요한 게시글</h2>
+        {% for article in person.like_articles.all %}
+            <div>{{ article.title }}</div>
+        {% endfor %}
+        <hr>
+        <a href="{% url 'articles:index' %}">back</a>
+    {% endblock content %}
+    ```
+
+- articles/index.html
+
+  - ```html
+        <p>
+          <b>작성자 : <a href="{% url 'accounts:profile' article.user.username%}">{{ article.user }}</b></a>
+        </p>
+    ```
+
+  다음과 같이 작성하여 작성자의 프로필로 이동할 수 있게 함
+
+------
+
+
+
+### Follow 기능
+
+- accounts/models.py
+
+  - ```python
+    class User(AbstractUser):
+        followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
+    ```
+
+- accounts/urls.py
+
+  - ```python
+    path('<int:user_pk>/follow/', views.follow, name='follow'),
+    ```
+
+- accounts/profile.html
+
+  - ```html
+        {% if request.user != person %}
+            <div>
+                <form action="{% url 'accounts:follow' person.pk%}" method="POST">
+                    {% csrf_token %}
+                    {% if request.user in person.followers.all %}
+                        <input type="submit" value="언팔">
+                    {% else %}
+                        <input type="submit" value="팔로우">
+                    {% endif %}
+                </form>
+            </div>
+        {% endif %}
+    ```
+
+- accounts/views.py
+
+  - ```python
+    def follow(request, user_pk):
+        User = get_user_model()
+        person = User.objects.get(pk=user_pk)
+        if request.user != person:
+            if request.user in person.followers.all():
+                person.followers.remove(request.user)
+            else:
+                person.followers.add(request.user)
+        return redirect('accounts:profile', person.username)
+    ```
+
+- articles/index.html
+
+  - ```html
+    <p>좋아요 수: {{ article.like_users.all | length }}</p>
+    ```
+
+  위와 같이 작성하면 길이를 출력할 수 있음
+
+  
