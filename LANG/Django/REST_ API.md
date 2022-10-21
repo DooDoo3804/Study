@@ -481,6 +481,8 @@ source : 필드를 채우는데 사용할 속성의 이름
 
 
 
+### 3. 객체와 리스트를 404에러 없이 가져오기
+
 ```python
 from django.shortcuts import get_object_or_404, get_list_or_404
 get_object_or_404(클래스, pk=article_pk) # 단일 데이터 조회
