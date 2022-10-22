@@ -93,7 +93,7 @@ html을 만들어서 렌더링 하는 방법
 
 ### 2. JsonResponse()를 사용한 응답
 
-- views.py
+- **views.py**
 
 ```python
 from django.http.response import JsonResponse
@@ -121,7 +121,7 @@ def article_json_1(request):
 
 ### 3. Django Serializer를 사용한 응답
 
-- views.py
+- **views.py**
 
 ```python
 from django.http.response import HttpResponse
@@ -140,7 +140,7 @@ Serialization을 거치면 다른 환경으로 포멧을 변경할 수 있음
 
 ### 4. Django REST framework를 사용한 응답
 
-- settings.py
+- **settings.py**
 
 ```python
 INSTALLED_APPS = [
@@ -183,7 +183,7 @@ response 로 API 응답 받아서 json으로 출력
 
 ### ModelSerializer
 
-- serializers.py
+- **serializers.py**
 
 ```python
 from rest_framework import seralizers
@@ -215,7 +215,7 @@ serializer.data
 
 #### 조회
 
-- views.py
+- **views.py**
 - 다수
 
 ```python
@@ -237,7 +237,7 @@ api_view decorator를 반드시 작성해야 함 / default가 GET이지만 작�
 
 list로 작성
 
-- serializers.py
+- **serializers.py**
 
 ```python
 from rest_framework import serializers
@@ -251,7 +251,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
 
 
-- views.py
+- **views.py**
 - 단일
 
 ```python
@@ -262,7 +262,7 @@ def article_detail(request, article_pk):
     return Response(serializer.data)
 ```
 
-- serializers.py
+- **serializers.py**
 
 ```python
 class ArticleSerializer(serializers.ModelSerializer):
@@ -277,7 +277,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 생성이 성공하면 201 Created 상태 코드를 / 실패 하면 400 Bad request를 응답
 
-- views.py
+- **views.py**
 
 ```python
 from rest_fromework import status
@@ -308,7 +308,7 @@ ArticleSerializer 를 쓰는 이유는 출력되는 데이터를 전체 확인�
 
 #### 삭제
 
-- views.py
+- **views.py**
 
 ```python
 @api_view(['GET', 'DELETE'])
@@ -329,7 +329,7 @@ def article_detail(request, article_pk):
 
 #### 수정
 
-- views.py
+- **views.py**
 
 ```python
 @api_view(['GET', 'DELETE', 'PUT'])
@@ -357,7 +357,7 @@ def article_detail(request, article_pk):
 
 #### 조회
 
-- views.py
+- **views.py**
 - 다수
 
 ```python
@@ -369,7 +369,7 @@ def comment_list(request):
         return Response(serializer.data)
 ```
 
-- serializers.py
+- **serializers.py**
 
 ```python
 class CommentSerializer(serializers.ModelSerializer):
@@ -409,7 +409,7 @@ def comment_create(request, article_pk):
 
 외래키가 들어가기 전에 is_valid를 수행하기 때문에 이를 제외 해주어야함
 
-- serializers.py
+- **serializers.py**
 
 ```
 class CommentSerializer(serializers.ModelSerializer):
