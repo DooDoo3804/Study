@@ -451,6 +451,30 @@ public class Arraylist2D {
 
 
 
+### Array of Objects
+
+```java
+public class arrayObjects {
+	public static void main(String[] args) {
+		Food food1 = new Food("pizza");
+		Food food2 = new Food("donut");
+		Food food3 = new Food("hamburger");
+		
+		Food[] refrigerator = {food1, food2, food3};
+		
+		System.out.println(refrigerator[0].name);
+		System.out.println(refrigerator[1].name);
+		System.out.println(refrigerator[2].name);
+	}
+}
+```
+
+
+
+
+
+
+
 ## String method
 
 ```java
@@ -501,4 +525,665 @@ Integer i2 = new Integer(100):
 
 
 
-21. for-each loop
+## for each
+
+```java
+import java.util.ArrayList;
+
+public class ForEach {
+	public static void main(String[] args) {
+		String[] animals = {"cat", "dog", "rat", "bird"};
+//		ArrayList<String> animal = new ArrayList<String>();
+//		animal.add("cat");
+//		animal.add("dog");
+//		animal.add("bird");
+//		animal.add("rat");
+		
+		for(String i : animals) {
+			System.out.println(i);
+		}
+	}
+}
+```
+
+JavaScript의 forEach와 같은 방식
+
+ArrayList 에서도 똑같이 적용 가능
+
+
+
+## methods
+
+```java
+public class Methods {
+	public static void main(String[] args) {
+		int x = 3;
+		int y = 4;
+		int z = add(x, y);
+		System.out.println(z);
+//		선언 때 ㅁ다ㅏ 데이터 타입을 선언해주는 것이 바람직함
+	}
+	static int add(int x, int y) {
+//		함수 안에 받을 변수와 데이터 타입을 선언해준다.
+//		static을 선언해야 함수든 뭐든 사용할 수 있음.
+		int z = x + y;
+		return z;
+	}
+}
+```
+
+
+
+### Overload methods
+
+같은 이름을 갖지만 다른 parameter를 갖는 함수를 말함
+
+조건
+
+- 메서드 이름이 같아야 함
+- 매개변수의 개수 또는 타입이 달라야 함
+  - 이때 같으면 오류가 발생
+
+```java
+public class OverloadMethods {
+	public static void main(String[] args) {
+		int x = 2;
+		int y = 3;
+		double z = add(x, y, 4, 5);
+		System.out.println(z);
+	}
+	static int add(int a, int b) {
+		System.out.println("This is overloaded method #1");
+		return a + b;
+	}
+	static int add(int a, int b, int c) {
+		System.out.println("This is overloaded method #2");
+		return a + b + c;
+	}
+	static int add(int a, int b, int c, int d) {
+		System.out.println("This is overloaded method #3");
+		return a + b + c + d;
+	}
+	static double add(double a, double b) {
+		System.out.println("This is overloaded method #4");
+		return a + b;
+	}
+	static double add(double a, double b, double c) {
+		System.out.println("This is overloaded method #5");
+		return a + b + c;
+	}
+	static double add(double a, double b, double c, double d) {
+		System.out.println("This is overloaded method #6");
+		return a + b + c + d;
+	}
+}
+```
+
+**parameter가 정확하게 일치하는 함수가 실행된다!!!**
+
+데이터 타입도 int와 double을 가려서 다른 함수를 실행함
+
+데이터 타입 역시 중요한 요소
+
+
+
+## printf
+
+```java
+public class Pinrtf {
+	public static void main(String[] args) {
+		boolean MyBoolean = true;
+		char MyChar = '@';
+		String myString = "DooDoo";
+		int MyInt = 123;
+		double MyDouble = 1000;
+		
+//		boolean
+		System.out.printf("%b", MyBoolean);
+//		char
+		System.out.printf("%c", MyChar);
+//		string
+		System.out.printf("%s", myString);
+//		int
+		System.out.printf("%d", MyInt);
+//		double
+		System.out.printf("%f", MyDouble);
+	}
+}
+```
+
+- %(숫자)s 중간에 space를 숫자 만큼 채움
+  - -와 함께 숫자를 입력하면 뒤로 space를 추가함
+
+- %.2f 와 같이 쓰면 소수점 2자리 까지만 출력
+- ,를 쓰면 숫자의 경우 3자리 씩 끊어서 출력함
+
+
+
+## final Keyword
+
+```java
+public class FirnalKeyword {
+	public static void main(String[] args) {
+		final double pi = 3.141592;
+        pi = 4;
+        // final을 입력한 경우 더 이상 해당 변수에 대해 할당을 할 수 없게 됨
+        // 따라서 위의 경우는 오류가 발생함
+        // 만약 final을 입력하지 않고 이후 4를 할당하면 아래에서 4가 출력됨
+		System.out.println(pi);
+		
+	}
+}
+```
+
+
+
+## Static keyword
+
+생성하고 공유할 수 있음
+
+class가 static member를 소유함
+
+즉 class의 객체 메소드에 있는 것이 아니라 class 자체에 존재함
+
+```java
+public class Friend {
+	String name;
+	static int numberOfFriends;
+	
+	Friend(String name) {
+		this.name = name;
+		numberOfFriends += 1;
+	}
+	
+	static void displayFriends() {
+		System.out.println("You have "+numberOfFriends+" firends");
+	}
+}
+```
+
+```java
+public class staticKeyword {
+	public static void main(String[] args) {
+		
+		Friend friend1 = new Friend("DooDoo");
+		Friend friend2 = new Friend("Auther");
+//		System.out.println(Friend.numberOfFriends);
+		Friend.displayFriends();
+	}
+}
+```
+
+static void를 사용하면 생성자로 만들고 접근하지 않아도 된다.(?)
+
+
+
+## Super Keyword
+
+```java
+public class superKeyword {
+	public static void main(String[] args) {
+		Hero hero1 = new Hero("Batman", 42, "$$$");
+		
+		System.out.println(hero1.name);
+		System.out.println(hero1.age);
+		System.out.println(hero1.power);
+	}
+}
+```
+
+```java
+public class Person {
+
+	String name;
+	int age;
+	
+	Person(String name, int age){
+		this.name = name;
+		this.age = age;
+	}
+}
+
+public class Hero extends Person{
+
+	String power;
+	
+	Hero(String name, int age, String power) {
+		super(name, age);
+		this.power = power;
+	}
+}
+```
+
+super를 통해 super class의 모든것을 상속 받을 수 있음
+
+```java
+public class Person {
+
+	String name;
+	int age;
+	
+	Person(String name, int age){
+		this.name = name;
+		this.age = age;
+	}
+	public String toString() {
+		return this.name+"\n"+this.age+"\n";
+	}
+}
+//
+public class Hero extends Person{
+
+	String power;
+	
+	Hero(String name, int age, String power) {
+		super(name, age);
+		this.power = power;
+	}
+	public String toString() {
+		return super.toString()+this.power;
+	}
+}
+//
+System.out.println(hero1.toString());
+```
+
+위와 같이 작성하면 super의 tostring으로 부터 모든 것을 상속받아 이후 추가적인 작업을 할 수 있음
+
+
+
+## OOP(객체지향)
+
+- OOPCar 클래스
+
+```java
+public class OOPCar {
+	
+	String make = "Chevrolet";
+	String model = "Corvette";
+	int year = 2020;
+	String color = "blue";
+	double price = 50000.00;
+	
+	void drive() {
+		System.out.println("You drive the car");
+	}
+	void brake() {
+		System.out.println("You step on the brakes");
+	}
+}
+```
+
+- main 클래스
+
+```java
+public class OOP {	
+	public static void main(String[] args) {
+		 
+		OOPCar myCar = new OOPCar();
+		System.out.println(myCar.make);
+		myCar.brake();
+	}
+}
+```
+
+다른 클래스에서 만든 것을 main에서 불러와 사용할 수 있음
+
+### Constructors
+
+조건
+
+- 생성자의 이름은 클래스의 이름과 같아야함
+- 생성자는 리턴 값이 없음
+- 메서드와 동일함 
+
+```java
+public class Human {
+	String name;
+	int age;
+	double weight;
+	
+	Human(String name, int age, double weight) {
+		this.name = name;
+        // 좌항은 인스턴스 변수, 우항은 매개변수이다.
+		this.age = age;
+		this.weight = weight;
+	}
+    void eat() {
+		System.out.println(this.name+" is eating");
+	}
+} // human을 위와 같이 선언함
+```
+
+```java
+public class Constructors {
+	public static void main(String[] args) {
+		Human human = new Human("DooDoo", 19, 178.3);
+		System.out.println(human.name);
+	}
+}
+```
+
+this를 통해 해당 객체의 속성을 자체적으로 정의 ?
+
+같은 객체 내의 함수에서 this를 통해 상위 속성에 접근이 가능함
+
+this는 참조 변수로 인스턴스 자신을 가리킨다. 인스턴스의 주소가 저장되어 있음
+
+
+
+### Overload
+
+```java
+public class Pizza {
+	String bread;
+	String souce;
+	String cheese;
+	String topping;
+
+	Pizza(String bread, String souce, String cheese) {
+		this.bread = bread;
+		this.souce = souce;
+		this.cheese = cheese;
+	}
+
+	Pizza(String bread, String souce, String cheese, String topping) {
+		this.bread = bread;
+		this.souce = souce;
+		this.cheese = cheese;
+		this.topping = topping;
+	}
+}
+```
+
+class 에서도 역시 overload 할 수 있음
+
+
+
+## Variable Scope
+
+- local scope
+  - method 안에 정의된 범위
+  - 오직 그 method 안에서만 보임
+- global scope
+  - method 밖이지만 class 안에 정의
+  - 모든 class에서 보임
+
+```java
+import java.util.Random;
+public class DiceRoller {
+	Random random;
+	int number = 0;
+//	global scope 범위
+	
+	DiceRoller(){
+//      local scope 범위
+		random = new Random();
+		roll();
+	}
+	void roll() {
+		number = random.nextInt(1,7);
+		System.out.println(number);
+	}
+}
+
+```
+
+
+
+## toString
+
+```java
+public class toString {
+	public static void main(String[] args) {
+		toStringCar car = new toStringCar();
+		
+		System.out.println(car.toString());
+	}
+}
+```
+
+일반적으로 toString을 하면 클래스의 adress를 주지만 `클래스이름+@+16진수 해시코드`
+
+```java
+public class toStringCar {
+	String make = "Chevrolet";
+	String model = "Corvette";
+	int year = 2020;
+	String color = "blue";
+	double price = 50000.00;
+	
+	public String toString() {
+		String myString = make + "\n" + model + "\n" + color + "\n" + year;
+		return myString;
+	}
+}
+```
+
+해당 클래스에서 toString을 overload를 하면 다른 것을 반환해 줄 수 있음
+
+String 클래스에는 그대로 문자열로 반환하는게 기본값이다.
+
+**제어자가 `public` 임을 유의**
+
+
+
+## Objects passing
+
+```java
+public class objectsPassing {
+	public static void main(String[] args) {
+		Garage garage = new Garage();
+		Car car = new Car("Tesla");
+		garage.park(car);
+	}
+}
+```
+
+```java
+public class Car {
+	String name;
+    
+	Car(String name){
+		this.name = name;
+	}
+}
+```
+
+```java
+public class Garage {
+	
+	void park(Car car) {
+		System.out.println("The "+car.name+"is parked in the garage");
+	}
+}
+```
+
+클래스의 void에 class로 인자 전달하는 방법
+
+
+
+## Inheritance(상속)
+
+부모로 부터 받는 속성
+
+```java
+public class Vehicle {
+
+	double speed;
+	
+	void go() {
+		System.out.println("This vehicle is moving");
+	}
+	void stop() {
+		System.out.println("This vehicle is stopped");
+	}
+}
+```
+
+```java
+public class Car extends Vehicle{
+
+	int wheels = 4;
+	int doors = 4;
+}
+public class Bicycle extends Vehicle{
+
+	int wheels = 2;
+	int pedals = 2;
+}
+```
+
+```java
+
+public class Inheritance {
+	public static void main(String[] args) {
+		Car car = new Car();
+		
+		Bicycle bike = new Bicycle();
+		
+        System.out.println(car.speed);
+		System.out.println(car.doors);
+		System.out.println(bike.pedals);
+	}
+}
+```
+
+vehicle이 부모이고 car와 bicycle은 부모로 부터 speed와 go stop을 받는다. 이들은 공통적으로 사용되고 각 개별로 사용되는 것들은 따로 정의 하면 된다.
+
+
+
+### method overriding
+
+```java
+public class Animal {
+	void speak() {
+		System.out.println("the animal speaking");
+	}
+}
+
+public class Dog extends Animal{
+	
+	@Override
+	void speak() {
+		System.out.println("the dog *bark*");
+	}
+}
+```
+
+Animal에서 정의되어있는 speak를 받아 dog에서 재정의가 가능하다
+
+```java
+public class MethodOverriding {
+	public static void main(String[] args) {
+		Animal animal = new Animal();
+		
+		Dog dog = new Dog();
+
+		dog.speak();
+		animal.speak();
+	}
+}
+```
+
+그냥 animal의 speak와 dog의 speak는 다른 결과를 야기
+
+
+
+## Abstraction
+
+추상 클래스를 의미
+
+추상클래스로 인스턴스는 생성할 수 없다. 추상 클래스는 상속을 통해서 자손클래스에 의해서만 완성될 수 있다.
+
+추상 클래스는 그 자체로서 클래스의 여할을 못하지만, 새로운 클래스를 작성하는데 있어서 바탕이 되는 조상 클래스로서 중요한 의미를 가짐
+
+추상 메서드 역시 같은 방식이며, 이 또한 이름만 선언하고 바디를 가지지 않는다. 자손에서 오버라이딩을 통해 그 기능을 작성해야만 한다. 메소드에 abstract를 붙이면 자손에서 반드시 그 기능을 작성해야만 함
+
+```java
+public abstract class Vehicle {
+
+	abstract void go();
+	
+}
+
+public class Car extends Vehicle{
+
+	@Override
+	void go() {
+		System.out.println("The driver is driving the car");
+	}
+}
+```
+
+
+
+## Access Modifiers
+
+- public - class / package / subclass / world
+  - 접근 제한이 없음
+
+- protected - class / package / subclass
+  - 같은 패키지 내에서, 다른 패키지의 자손 클래스에서 접근이 가능
+- (no modifier) - class / package
+  - 같은 패키지 내에서만 접근이 가능
+- private - class
+  - 같은 클래스 내에서만 접근이 가능
+
+
+
+## Encapsulation(캡슐화)
+
+```java
+public class Car {
+
+	private String make;
+	private String model;
+	private int year;
+	
+	Car(String make, String model, int year) {
+		this.setMake(make);
+		this.setModel(model);
+		this.setYear(year);
+	}
+	public String getMake() {
+		return make;
+	}
+	public String getModel() {
+		return model;
+	}
+	public int getYear() {
+		return year;
+	}
+	public void setMake(String make) {
+		this.make = make;
+	}
+	public void setModel(String model) {
+		this.model = model;
+	}
+	public void setYear(int year) {
+		this.year = year;
+	}
+}
+```
+
+car class에 저렇게 선언을 한다 get은 해당 속성을 return  해주는 method이고, set은 해당 속성을 설정하게 해주는 method이다.
+
+```java
+public class Encapsulations {
+	public static void main(String[] args) {
+		Car car = new Car("Chevrolet", "Camaro", 2020);
+		car.setYear(2022);
+		System.out.println(car.getYear());
+	}
+}
+```
+
+위에서 볼 수 있듯이, set을 통해 설정을 해줄 수 있고, get을 통해서 불러올 수 있다.
+
+getter() 와 setter()
+
+
+
+## Copy Objects
+
