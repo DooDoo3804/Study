@@ -212,7 +212,9 @@ public class RandomNum {
 
 
 
-## if 문
+## 조건문
+
+### if 문
 
 ```java
 public class If_statements {
@@ -234,7 +236,7 @@ public class If_statements {
 
 
 
-## Switch 문
+### Switch 문
 
 ```java
 public class Switches {
@@ -271,7 +273,7 @@ import java.util.Scanner;
 public class LogicalOperator {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("You are plating game! Press q or Q to quit!");
+		System.out.println("You are playing game! Press q or Q to quit!");
 		String response = scanner.next();
 		
 		if(response.equals("q") || response.equals("Q")) {
@@ -288,7 +290,9 @@ scanner.equal 로 사용자의 input을 바로 확인이 가능함
 
 
 
-## While Loop
+## 반복문
+
+### While Loop
 
 ```java
 import java.util.Scanner;
@@ -320,7 +324,7 @@ do 와 while은 비슷하게 동작하지만 do의 경우 조건과 상관 없�
 
 
 
-## for loop
+### for loop
 
 ```java
 public class ForLoop {
@@ -335,7 +339,7 @@ public class ForLoop {
 
 
 
-## Nested Loop
+### Nested Loop
 
 ```java
 import java.util.Scanner;
@@ -471,46 +475,6 @@ public class arrayObjects {
 
 
 
-
-
-
-
-## String method
-
-```java
-public class StringMethod {
-	public static void main(String[] args) {
-		
-		String name = " Bro ";
-//		boolean result = name.equals("bro");
-//		boolean result = name.equalsIgnoreCase("bro");
-//		위와 같이 작성하면 대소문자 구문을 없앰
-		
-//		char result = name.charAt(0);
-//		해당 인덱스의 문자를 반환
-		
-//		int result = name.indexOf("B");
-//		해당 문자의 처음 인덱스를 반환
-		
-//		boolean result = name.isEmpty();
-//		빈칸인지 아닌지 true false로 반환
-		
-//		String result = name.toUpperCase();
-//		모두 대문자로 변환
-		
-//		String result = name.toLowerCase();
-//		모두 대문자로 변환
-		
-		String result = name.trim();
-//		앞뒤의 빈칸을 삭제
-		System.out.println(result);
-		
-	}
-}
-```
-
-
-
 ## Wrapper classes
 
 java에서는 8개의 기본형을 객체로 다루지 않는다.
@@ -568,6 +532,42 @@ public class Methods {
 //		static을 선언해야 함수든 뭐든 사용할 수 있음.
 		int z = x + y;
 		return z;
+	}
+}
+```
+
+
+
+### String method
+
+```java
+public class StringMethod {
+	public static void main(String[] args) {
+		
+		String name = " Bro ";
+//		boolean result = name.equals("bro");
+//		boolean result = name.equalsIgnoreCase("bro");
+//		위와 같이 작성하면 대소문자 구문을 없앰
+		
+//		char result = name.charAt(0);
+//		해당 인덱스의 문자를 반환
+		
+//		int result = name.indexOf("B");
+//		해당 문자의 처음 인덱스를 반환
+		
+//		boolean result = name.isEmpty();
+//		빈칸인지 아닌지 true false로 반환
+		
+//		String result = name.toUpperCase();
+//		모두 대문자로 변환
+		
+//		String result = name.toLowerCase();
+//		모두 대문자로 변환
+		
+		String result = name.trim();
+//		앞뒤의 빈칸을 삭제
+		System.out.println(result);
+		
 	}
 }
 ```
@@ -658,9 +658,11 @@ public class Pinrtf {
 - %.2f 와 같이 쓰면 소수점 2자리 까지만 출력
 - ,를 쓰면 숫자의 경우 3자리 씩 끊어서 출력함
 
+## KeyWords
 
 
-## final Keyword
+
+### final Keyword
 
 ```java
 public class FirnalKeyword {
@@ -678,7 +680,7 @@ public class FirnalKeyword {
 
 
 
-## Static keyword
+### Static Keyword
 
 생성하고 공유할 수 있음
 
@@ -718,7 +720,7 @@ static void를 사용하면 생성자로 만들고 접근하지 않아도 된다
 
 
 
-## Super Keyword
+### Super Keyword
 
 ```java
 public class superKeyword {
@@ -1187,3 +1189,323 @@ getter() 와 setter()
 
 ## Copy Objects
 
+```java
+public class CopyObjects {
+	public static void main(String[] args) {
+		Car car1 = new Car("chevrolet", "Camaro", 2020);
+//		Car car2 = new Car("Ford", "Mustang", 1996);
+		
+//		car2.copy(car1);
+		Car car2 = new Car(car1);
+		
+		System.out.println(car1);
+		System.out.println(car2);
+		
+		System.out.println(car1.getMake());
+		System.out.println(car2.getMake());
+	}
+}
+```
+
+```java
+public class Car {
+
+	private String make;
+	private String model;
+	private int year;
+	
+	Car(String make, String model, int year) {
+		this.setMake(make);
+		this.setModel(model);
+		this.setYear(year);
+	}
+	Car(Car x){
+		this.copy(x);
+	}
+	public String getMake() {
+		return make;
+	}
+	public String getModel() {
+		return model;
+	}
+	public int getYear() {
+		return year;
+	}
+	public void setMake(String make) {
+		this.make = make;
+	}
+	public void setModel(String model) {
+		this.model = model;
+	}
+	public void setYear(int year) {
+		this.year = year;
+	}
+	public void copy(Car x) {
+		this.setModel(x.getModel());
+		this.setMake(x.getMake());
+		this.setYear(x.getYear());
+	}
+}
+```
+
+단순히 `car1 = car2`를 하면 얕은 복사로 같은 주소로 복사가 됨
+
+반면 public void copy를 선언하여 각각 할당을 해주면 car2.copy(car1)으로 복사하면 다른 주소로 복사가 됨
+
+여기서 저 copy를 클래스 내에서 Car(car x)메소드로 선언을 해주면 car2를 선언하지 않고 바로 복사가 가능하다.
+
+
+
+## Interface
+
+클래스에 적용할 수 있는 템플릿(template)
+
+상속과 비슷하지만 클래스에 필수적인 것을 특정한다.(?)
+
+하나 이상을 가질 수 있음
+
+```java
+public interface Prey {
+
+	void flee();
+}
+//--
+public interface Predator {
+
+	void hunt();
+}
+//--
+public class Rabbit implements Prey{
+	@Override
+	public void flee() {
+		System.out.println("The rabbit is fleeing");
+	}
+}
+//--
+public class Hawk implements Predator{
+
+	@Override
+	public void hunt() {
+		System.out.println("The hawk is hunting");
+	}
+}
+//--
+public class Fish implements Prey, Predator{
+
+	@Override
+	public void hunt() {
+		System.out.println("The fish is hunting smaller fish");
+	}
+
+	@Override
+	public void flee() {
+		System.out.println("This fish is fleeing from a larger fish");
+	}
+}
+```
+
+
+
+## Polymorphism(다형성)
+
+car bike boat는 모두 vehicle에 속하기 때문에 다 달라도 큰 부모로 부터 접근이 가능하다
+
+```java
+public class Polymorphism {
+	public static void main(String[] args) {
+		
+		PolymorphismCar car = new PolymorphismCar();
+		PolymorphismBicycle bike = new PolymorphismBicycle();
+		PolymorphismBoat boat = new PolymorphismBoat();
+		
+		PolymorphismVehicle[] racers = {car, bike, boat};
+
+		for(PolymorphismVehicle x : racers) {
+			x.go();
+		}
+	}
+}
+//--
+public class PolymorphismVehicle {
+
+	public void go() {
+	}
+}
+//--
+public class PolymorphismCar extends PolymorphismVehicle{
+	@Override
+	public void go() {
+		System.out.println("The car begins moving");
+	}
+}
+//--
+public class PolymorphismBicycle extends PolymorphismVehicle{
+	@Override
+	public void go() {
+		System.out.println("The bike begins moving");
+	}
+}
+//--
+public class PolymorphismBoat extends PolymorphismVehicle{
+	@Override
+	public void go() {
+		System.out.println("The Boat begins moving");
+	}
+}
+```
+
+### Dynamic Polymorphism
+
+사용자의 입력에 따라 그 종류가 결정되는 코드일 경우.
+
+아직 사용자의 입력을 모를 때 큰 부모의로 선언을 하고 사용하면 된다.
+
+이후 사용자의 입력에 맞춰 그 세부 클래스를 설정하는 것이 가능.
+
+```java
+Animal animal;
+
+// 사용자의 입력을 받음
+// 아래와 같이 작성 가능
+
+if (choice==1){
+    animal = new Dog();
+    animal.speak();
+}
+```
+
+
+
+## Exception handling
+
+```java
+import java.util.Scanner;
+
+public class Exceptions {
+	public static void main(String[] args) {
+		
+		try {
+			Scanner scanner = new Scanner(System.in);
+			
+			System.out.println("Enter a whole number to divide: ");
+			int x = scanner.nextInt();
+			System.out.println("Enter a whole number to divide by: ");
+			int y = scanner.nextInt();
+			
+			int z = x / y;
+			
+			System.out.println("result: "+z);
+		}
+		catch (ArithmeticException e) {
+			System.out.println("You can't divide by zero");
+		}
+		catch (Exception e) {
+			System.out.println("Something went wrong");
+		}
+		finally {
+			System.out.println("This will always print");
+		}
+	}
+}
+```
+
+try catch 를 사용하면 try구문 안에서 오류가 발생한 경우 catch를 통해 해당 오류에 동작을 한다. 만약 Exception 으로 선언하면 모든 오류 구문에 대해서 반환한다. finally는 try구문에서 오류가 발생하든 아무일도 없든 그냥 무조건 적으로 동작한다.
+
+## File class
+
+```java
+import java.io.File;
+
+public class FileClasses {
+	
+	public static void main(String[] args) {
+		
+		File file = new File("secret_message.txt");
+		
+		if(file.exists()) {
+			System.out.println("That file exists!!?!");
+		}
+		else {
+			System.out.println("That file doesn't exist! ");
+		}
+	}
+}
+```
+
+위와 같이 작성하여 파일을 조회할 수 있음
+
+
+
+### File Writer / Reader
+
+```java
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class FileClasses {
+	
+	public static void main(String[] args) throws IOException {
+		
+		try {
+			FileWriter writer = new FileWriter("poem.txt");
+			writer.write("Roses are red \nViolets are blue");
+			writer.append("\n(A poem by doodoo)");
+            // append는 이미 작성된 글에 추가할 때 사용
+			writer.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {}
+		
+		try { 
+			FileReader reader = new FileReader("art.txt");
+			int data = reader.read();
+            // 만약 파일이 끝나거나 뒤에 더 없으면 -1을 반환
+			while(data != -1) {
+				System.out.print((char)data);
+				data = reader.read();
+			}
+			reader.close();
+			
+		}
+		catch (FileNotFoundException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+}
+```
+
+Audio 도 읽어올 수 있음
+
+
+
+## GUI
+
+```java
+import java.awt.Color;
+
+import javax.swing.JFrame;
+
+public class FrameGUI {
+	public static void main(String[] args) {
+		JFrame frame = new JFrame();
+		
+		frame.setTitle("JFrame title goes here"); // frame 제목 출력
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // x 눌렀을 때 종료
+		frame.setResizable(false); // 크기 조절 불가
+		frame.setSize(420, 420); // 초기 크기 설정
+		frame.getContentPane().setBackground(new Color(125,125,125)); // 배경 색 0xFFFFFF 도 가능
+		frame.setVisible(true); // frame 출력
+	}
+}
+```
+
+Frame 클래스를 통해 생성할 수 있음
