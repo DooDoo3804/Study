@@ -1509,3 +1509,6 @@ public class FrameGUI {
 ```
 
 Frame 클래스를 통해 생성할 수 있음
+
+이후 GUI는 필요할 때 학습예정
+
