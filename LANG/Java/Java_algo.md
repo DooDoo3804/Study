@@ -21,6 +21,17 @@ answer = phone_number.substring(index1, index2);
 
 String 타입의 answer의 인덱스 index1부터 index2까지 슬라이싱을 함..
 
+### equals
+
+```java
+String hand = "right";
+if (hand.equals("right")) {
+    System.out.println("same string");
+}
+```
+
+위의 예시처럼 문자열은 String 즉 객체로 선언된다. 즉 그냥 단순히 `==`로 비교하면 오류가 발생한다. 따라서 String의 메서드 equals를 사용하여 비교하면 된다.
+
 
 
 ### valueOf
