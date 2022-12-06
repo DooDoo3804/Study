@@ -130,6 +130,16 @@ answer.stream().mapToInt(i -> i).toArray();
 - ArrayList를 사용했을 때 장점
   - 크기를 미리 정하지 않더라도 add를 통해 요소를 추가할 수 있음 / 편함
 
+### set
+
+```java
+ArrayList<> list = new ArrayList();
+list.set(i, v);
+// 인덱스 i 위치를 값 v로 변경
+```
+
+ArrayList의 특정 위치의 값을 변경.
+
 
 
 ## 삼항 연산자
@@ -187,3 +197,18 @@ Comparable은 상속을 받아서 사용할 수 있는 메서드이다.
 
 compareTo를 직접 사용하지 않지만, 해당 문제에서는 sort 메서드를 사용하기 위해 비교하여 정렬이 되는 기준을 쓸 필요가 있어 Comparable을 상속받아 사용한다.
 
+
+
+## 약수 구하기
+
+```java
+for (int i = 1; i*i <= number; i++) {
+    if (i*i == number)
+        subSum ++;
+    else if (number%i == 0) {
+        subSum += 2;
+    }
+}
+```
+
+위의 알고리즘이 훨씬 시간이 단축됨!!
