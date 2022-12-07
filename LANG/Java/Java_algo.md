@@ -80,6 +80,18 @@ Character.isDigit(s.charAt(i));
 
 
 
+## Stack
+
+### .peek()
+
+맨 뒤의 값을 확인할 수 있음
+
+
+
+
+
+
+
 ## Method
 
 ### void
