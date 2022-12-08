@@ -211,7 +211,9 @@ compareTo를 직접 사용하지 않지만, 해당 문제에서는 sort 메서�
 
 
 
-## 약수 구하기
+## 알고리즘
+
+### 약수 구하기
 
 ```java
 for (int i = 1; i*i <= number; i++) {
@@ -224,3 +226,12 @@ for (int i = 1; i*i <= number; i++) {
 ```
 
 위의 알고리즘이 훨씬 시간이 단축됨!!
+
+
+
+### LRU(Least Recently Used)
+
+head 쪽이 최근에 참조된 것, tail쪽이 오랫동안 참조되지 않은 것
+
+Double Linked Lists 로 구현하기 때문에 두 개의 Class를 선언
+
