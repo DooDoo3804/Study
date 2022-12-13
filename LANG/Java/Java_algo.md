@@ -154,6 +154,32 @@ ArrayList의 특정 위치의 값을 변경.
 
 
 
+## Map
+
+Collection과는 다른 저장 방식을 가짐
+
+HashMap으로 선언하여 사용
+
+```java
+Map<String, String> member = new HashMap<>();
+```
+
+#### put
+
+key와 value를 입력
+
+#### get
+
+value 값을 추출
+
+#### remove
+
+key에 해당하는 key와 value를 삭제하고 그 value를 리턴
+
+
+
+
+
 ## 삼항 연산자
 
 ```java
