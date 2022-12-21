@@ -80,11 +80,7 @@ Character.isDigit(s.charAt(i));
 
 
 
-## Stack
 
-### .peek()
-
-맨 뒤의 값을 확인할 수 있음
 
 
 
@@ -132,7 +128,7 @@ Arrays.sort(d, Collections.reverseOrder());
 
 ## ArrayList
 
-### ArrayList를 Array로 변환
+### ArrayList -> Array
 
 ```java
 ArrayList<> answer = new ArrayList<>();
@@ -164,19 +160,48 @@ HashMap으로 선언하여 사용
 Map<String, String> member = new HashMap<>();
 ```
 
-#### put
+### put
 
 key와 value를 입력
 
-#### get
+### get
 
 value 값을 추출
 
-#### remove
+### remove
 
 key에 해당하는 key와 value를 삭제하고 그 value를 리턴
 
 
+
+## PriorityQueue
+
+우선순위 큐 - 숫자가 낮을 수록 우선 순위를 가짐
+
+```java
+import java.util.PriorityQueue;
+PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
+```
+
+### offer
+
+우선순위 큐에 삽입
+
+### peek
+
+처음 항목을 엿보기 / 추출하지 않음
+
+### poll
+
+처음 항목을 제거하고 반환함
+
+
+
+## Stack
+
+### .peek()
+
+맨 뒤의 값을 확인할 수 있음
 
 
 
