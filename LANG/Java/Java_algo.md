@@ -21,6 +21,20 @@ answer = phone_number.substring(index1, index2);
 
 String 타입의 answer의 인덱스 index1부터 index2까지 슬라이싱을 함..
 
+
+
+### startsWith
+
+```java
+String1.startsWith(String2);
+```
+
+String1이 String2로 시작하는지 확인하는 함수
+
+boolean을 return함
+
+
+
 ### equals
 
 ```java
@@ -80,14 +94,6 @@ Character.isDigit(s.charAt(i));
 
 
 
-
-
-
-
-
-
-
-
 ## Method
 
 ### void
@@ -103,10 +109,6 @@ public void name() {
     // return 하는 것이 없어야 오류 발생하지 않음
 }
 ```
-
-
-
-
 
 
 
@@ -171,6 +173,23 @@ value 값을 추출
 ### remove
 
 key에 해당하는 key와 value를 삭제하고 그 value를 리턴
+
+
+
+### Map -> List 형태로 변환
+
+```java
+// List<Map.Entry<Integer, Integer>> everyList = new LinkedList<>(sizeCount.entrySet());
+List<Map.Entry<Integer, Integer>> everyList = new ArrayList<>(sizeCount.entrySet());
+everyList.sort(Map.Entry.comparingByValue());
+// Array를 value를 기준으로 정렬함
+```
+
+`Arrays.sort()`을 사용하기 위해서는 List의 형태로 바꿔줄 필요가 있음.
+
+배열은 탐색 정렬에 유리
+
+데이터 추가/삭제가 많으면 연결 리스트가 유리
 
 
 
