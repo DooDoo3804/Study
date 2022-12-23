@@ -110,6 +110,76 @@ config 패키지를 생성하여 위와 같이 작성하면 Sweager를 들어갈
 
 
 
+## Lombok
+
+반복되는 메소드를 Annotation을 사용하여 자동으로 작성해주는 라이브러리
+
+
+
+Getter Setter NoArgConstructor Data ToString 등
+
+```java
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <optional>true</optional>
+</dependency>
+```
+
+### Getter Setter
+
+@Getter / @Setter 를 추가하면 `Alt+INS`를 통해 입력하지 않아도 생성된다.
+
+### @NoArgsConstructor
+
+ 파라미터가 없는 생성자를 생성
+
+### @AllArgsConstructor
+
+모든 필드 값을 파라미터로 갖는 생성자를 생성
+
+### @RequiredArgsConstructor
+
+필드값 중 final이나 @NotNull인 값을 갖는 생성자를 생성
+
+### @ToString
+
+toString 메소드를 자동으로 생성
+
+(exclude='')를 통해 생성하지 않았으면 하는 부분을 제외하고 생성할 수 있음
+
+### @EqulaAndHashCode
+
+equals : 두 객체의 내용이 같은지 동등성을 비교하는 연산자
+
+hashcode : 두 객체가 같은 객체인지 동일성을 비교하는 연산자
+
+### @data
+
+앞의 모든 어노테이션 모두를 추가함 (모두 추가하기 때문에 골라서 하지 못함)
+
+
+
+```java
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class MemberDTO {
+    
+    private String name;
+    private String email;
+    private String organization;
+
+}
+// Getter Setter ToString 을 저 6줄로 채울 수 있다!!
+```
+
+
+
 ## Starting
 
 spring initializr를 체크하여 생성
@@ -525,3 +595,34 @@ public class DeleteController {
 HttpEntity라는 클래스를 상속받아 사용하는 클래스
 
 Http response를 표현하기 위함
+
+
+
+## DB적용
+
+### Spring Boot 서비스 구조
+
+![image-20221223165747519](./assets/image-20221223165747519.png)
+
+### Entity
+
+데이터베이스에 쓰일 컬럼과 여러 엔티티 간의 연관관계를 정의
+
+### Repository
+
+Entity에 의해 생성된 데이터베이스에 접근하는 메서드를 사용하기 위한 인터페이스
+
+데이터 베이스에 적용할 CRUD를 정의
+
+### DAO
+
+데이터베이스에 접근하는 객체를 의미
+
+Service와 DB를 연결해줌
+
+데이터를 조회하거나 조작하는 기능을 전담
+
+### DTO (VO)
+
+계층간 데이터 교환을 위한 객체를 의미
+

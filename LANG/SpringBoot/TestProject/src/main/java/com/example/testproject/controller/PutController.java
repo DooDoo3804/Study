@@ -1,8 +1,7 @@
 package com.example.testproject.controller;
 
-import com.example.testproject.DTO.MemberDTO;
+import com.example.testproject.data.dto.MemberDTO;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
