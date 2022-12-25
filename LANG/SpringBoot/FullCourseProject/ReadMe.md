@@ -164,3 +164,8 @@ Autowired로 연결한 빈 목록에서 유일한 빈을 구별함 (예 @Qualifi
 
 연결할 빈의 값 타입을 지정 (예 @Qualifier("serviceName") )
 
+
+
+
+
+![image-20221225230804719](./assets/image-20221225230804719.png)
