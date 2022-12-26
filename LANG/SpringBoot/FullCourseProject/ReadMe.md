@@ -169,3 +169,177 @@ Autowired로 연결한 빈 목록에서 유일한 빈을 구별함 (예 @Qualifi
 
 
 ![image-20221225230804719](./assets/image-20221225230804719.png)
+
+
+
+### My SQL
+
+#### DB TABLE 생성
+
+![image-20221226002105728](./assets/image-20221226002105728.png)
+
+- application.properties
+
+```java
+spring.datasource.url=jdbc:mysql://localhost:3306/ems?useSSL=false
+spring.datasource.username=root
+spring.datasource.password=1234
+
+##Hibernate properties
+#spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+#create create-drop
+spring.jpa.hibernate.ddl-auto=update
+
+```
+
+- pom.xml
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <scope>runtime</scope>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jdbc</artifactId>
+</dependency>
+```
+
+mysql과 data-jpa, data-jdbc를 추가해준다.
+
+
+
+## Employee REST API
+
+![image-20221226192037427](./assets/image-20221226192037427.png)
+
+### CreateEmployee API
+
+- EmployeeService.java
+
+```java
+package com.example.springbootdemo.service;
+
+import com.example.springbootdemo.model.Employee;
+
+public interface EmployeeService {
+    Employee saveEmployee(Employee employee);
+}
+```
+
+- EmployeeServiceImpl.java
+
+```java
+package com.example.springbootdemo.service.impl;
+
+import com.example.springbootdemo.model.Employee;
+import com.example.springbootdemo.repository.EmployeeRepository;
+import com.example.springbootdemo.service.EmployeeService;
+import org.springframework.stereotype.Service;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+    private EmployeeRepository employeeRepository;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        super();
+        this.employeeRepository = employeeRepository;
+    }
+
+    @Override
+    public Employee saveEmployee(Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
+}
+```
+
+- EmployeeRepository.java
+
+```java
+package com.example.springbootdemo.repository;
+
+import com.example.springbootdemo.model.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+
+}
+```
+
+- EmployeeController.java
+
+```java
+package com.example.springbootdemo.controller;
+
+import com.example.springbootdemo.model.Employee;
+import com.example.springbootdemo.service.EmployeeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(path = "/api/employees")
+public class EmployeeController {
+    private EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        super();
+        this.employeeService = employeeService;
+    }
+
+    @PostMapping(value = "")
+    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
+        return new ResponseEntity<Employee>(employeeService.saveEmployee(employee), HttpStatus.CREATED);
+
+    }
+}
+```
+
+![image-20221226192216705](./assets/image-20221226192216705.png)
+
+![image-20221226192258129](./assets/image-20221226192258129.png)
+
+workbench 확인해 보면 데이터가 들어가 있음
+
+### GetAllEmployee API
+
+![image-20221226200034864](./assets/image-20221226200034864.png)
+
+- EmployeeService.java
+
+```java
+// 추가
+List<Employee> getAllEmployees();
+```
+
+- EmployeeServiceImpl.java
+
+```java
+// 추가
+@Override
+public List<Employee> getAllEmployees() {
+    return employeeRepository.findAll();
+}
+```
+
+- EmployeeController.java
+
+```java
+// 추가
+//build get all employees REST API
+@GetMapping(value = "")
+public List<Employee> getAllEmployees() {
+    return employeeService.getAllEmployees();
+}
+```
+
