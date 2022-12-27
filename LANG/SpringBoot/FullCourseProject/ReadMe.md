@@ -2,6 +2,14 @@
 
 
 
+**Service 작성 이후 ServiceImpl를 작성하고 사용할 주소와 동작을 하는 controller 작성**
+
+**만약 controller에서 return 하려는 것이 객체라면 return 값에 ResponseEntity<>를 사용한다.**
+
+
+
+
+
 만약 메서드의 return 타입을 List로 하면 JSON 형태로 return 해준다
 
 ```java
@@ -273,6 +281,40 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 }
 ```
 
+- ResourceNotFoundException.java
+
+```java
+package com.example.springbootdemo.exception;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@Getter
+@Setter
+@ToString
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+
+public class ResourceNotFoundException extends RuntimeException{
+    private String resourceName;
+    private String fieldName;
+    private Object fieldValue;
+
+    public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue) {
+        super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
+        this.resourceName = resourceName;
+        this.fieldName = fieldName;
+        this.fieldValue = fieldValue;
+    }
+}
+```
+
+위의 코드를 작성하면 404 not found의 요청을 해결할 수 있음
+
+
+
 - EmployeeController.java
 
 ```java
@@ -342,4 +384,232 @@ public List<Employee> getAllEmployees() {
     return employeeService.getAllEmployees();
 }
 ```
+
+
+
+### GetById API
+
+repository 에서 findbyid를 사용하여 찾는다. getbyid는 더 이상 사용하지 않는 메서드!!
+
+- EmployeeService.java
+
+```java
+Employee getEmployeeById(long id);
+```
+
+- EmployeeServiceImpl.java
+
+```java
+    @Override
+    public Employee getEmployeeById(long id) {
+//        Optional<Employee> employee = employeeRepository.findById(id);
+//        if (employee.isPresent())
+//            return employee.get();
+//        else
+//            throw new ResourceNotFoundException("Employee", "Id", id);
+        
+//        위와 아래는 같은 코드
+        return employeeRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Employee", "id", id));
+    }
+```
+
+아래 처럼 작성하면 훨씬 짧게 작성이 가능
+
+orElseThrow를 통해 해당 객체가 없는 경우 에러를 띄워준다. 위에서 작성한 notFoundException을 통해
+
+- EmployeeController.java
+
+```java
+    @GetMapping(value = "{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") long employeeId) {
+        return new ResponseEntity<Employee>(employeeService.getEmployeeById(employeeId), HttpStatus.OK);
+    }
+```
+
+![image-20221227001049403](./assets/image-20221227001049403.png)
+
+![image-20221227001755229](./assets/image-20221227001755229.png)
+
+### UpdateEmployee  API
+
+- EmployeeService.java
+
+```java
+    Employee updateEmployee(Employee employee, long id);
+```
+
+- EmployeeServiceImpl.java
+
+```java
+    @Override
+    public Employee updateEmployee(Employee employee, long id) {
+        // 해당 id의 employee가 DB에 존재하지 않는다면 404 throw
+        Employee existingEmployee = employeeRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Employee", "id", id));
+        // 존재하는 경우 해당 값을 employee로 update
+        existingEmployee.setFirstName(employee.getFirstName());
+        existingEmployee.setLastName(employee.getLastName());
+        existingEmployee.setEmail(employee.getEmail());
+        // update한 값을 저장
+        employeeRepository.save(existingEmployee);
+        return existingEmployee;
+    }
+```
+
+- EmployeeController.java
+
+```java
+    @PutMapping(value = "{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable("id") long id,
+                                                   @RequestBody Employee employee) {
+        return new ResponseEntity<Employee>(employeeService.updateEmployee(employee, id), HttpStatus.OK);
+    }
+// RequestBody에서 employee를 가져온다
+```
+
+### DeleteEmployee API
+
+- EmployeeService.java
+
+```java
+    void deleteEmployee(long id);
+```
+
+- EmployeeServiceImpl.java
+
+```java
+    @Override
+    public void deleteEmployee(long id) {
+        employeeRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("employee", "id", id));
+        employeeRepository.deleteById(id);
+    }
+```
+
+- EmployeeController.java
+
+```java
+    @DeleteMapping(value = "{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable("id") long id) {
+        employeeService.deleteEmployee(id);
+        return new ResponseEntity<String>("Employee deleted successfully!!", HttpStatus.OK);
+    }
+```
+
+![image-20221227154151679](./assets/image-20221227154151679.png)
+
+![image-20221227154141218](./assets/image-20221227154141218.png)
+
+
+
+# Thymeleaf
+
+## What is Thymeleaf
+
+동적으로 화면을 구성하여 사용할 수 있게 함
+
+HTML, XML, css, JS 등을 사용하기 위한 template
+
+![image-20221227160747423](./assets/image-20221227160747423.png)
+
+초반 dependency 설정에서 추가할 수 있고, 중간에 아래의 코드를 추가하면 사용 가능
+
+controller.java 에서 @RestController를 쓰면 thymeleaf를 사용하지 못한다.
+
+@Controller를 사용해야함
+
+- pom.xml
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+```
+
+아래와 같은 파일 구조를 가짐
+
+![image-20221227163008394](./assets/image-20221227163008394.png)
+
+### 변수
+
+- helloworldController.js
+
+```java
+    @GetMapping(value = "/hello")
+    public String hello(Model model) {
+        model.addAttribute("message", "Hello World");
+        return "helloworld";
+    }
+```
+
+- helloworld.html
+
+```html
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thymeleaf HelloWorld App</title>
+</head>
+<body>
+  <h1 th:text = "'Thymeleaf ' + ${message} + ' App'"></h1>
+
+</body>
+</html>
+```
+
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"> 타임리프를 사용하겠다고 선언
+
+model.addAttribute로 message이름으로 "Hello World"를 담아서 html에서 사용 가능
+
+![image-20221227163443338](./assets/image-20221227163443338.png)
+
+### css / js
+
+- helloworldController.js
+
+```java
+    @GetMapping(value = "/style")
+    public String style() {
+        return "add-css-js-demo";
+    }
+```
+
+return 해주는 값은 templates의 이름인 add-css-js-demo로 해주어야 views가 뜬다.
+
+이름이 다르면 에러 발생
+
+- add-css-js-demo/html
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Add CSS and JS to Thymeleaf</title>
+  <!-- link를 통해 css 파일 추가 -->
+  <link th:href = "@{/css/main.css}" rel="stylesheet">
+  <!--  script를 통해 js 파일 추가-->
+  <script type="text/javascript" th:src="@{/js/action.js}"></script>
+</head>
+<body>
+  <h2>Heading</h2>
+  <p>
+    This is text on which we want to apply <strong>very special</strong> styling.
+  </p>
+  <button type="button" th:onclick="demo()">Show Alert</button>
+
+</body>
+</html>
+```
+
+위의 파일 경로 대로 js와 css를 작성하고 경로를 통해 추가하면 된다.
+
+@를 쓰면 static 경로를 의미함(maybe)
+
+![image-20221227163457457](./assets/image-20221227163457457.png)
+
+if else switch 모두 사용 가능
 
