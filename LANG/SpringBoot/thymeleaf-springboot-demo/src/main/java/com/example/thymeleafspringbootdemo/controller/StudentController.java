@@ -5,19 +5,19 @@ import com.example.thymeleafspringbootdemo.repository.StudentRepository;
 import com.example.thymeleafspringbootdemo.service.StudentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class StudentController {
 
     private StudentService studentService;
+    private final StudentRepository studentRepository;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService,
+                             StudentRepository studentRepository) {
         super();
         this.studentService = studentService;
+        this.studentRepository = studentRepository;
     }
     @GetMapping(value = "/students")
     public String listStudents(Model model) {
@@ -35,6 +35,31 @@ public class StudentController {
     @PostMapping(value = "/students")
     public String saveStudent(@ModelAttribute("student") Student student) {
         studentService.saveStudent(student);
+        return "redirect:/students";
+    }
+
+    //update
+    @GetMapping(value = "/students/edit/{id}")
+    public String editStudentForm(@PathVariable long id, Model model) {
+        model.addAttribute("student", studentService.getStudentById(id));
+        return "edit_student";
+    }
+
+    @PostMapping(value = "/students/{id}")
+    public String updateStudent(@PathVariable Long id,
+                                @ModelAttribute("student") Student student,
+                                Model model) {
+        Student existingStudent = studentService.getStudentById(id);
+        existingStudent.setFirstName(student.getFirstName());
+        existingStudent.setLastName(student.getLastName());
+        existingStudent.setEmail(student.getEmail());
+        studentService.editStudent(existingStudent);
+        return "redirect:/students";
+    }
+
+    @GetMapping(value = "/students/{id}")
+    public String deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudentById(id);
         return "redirect:/students";
     }
 }

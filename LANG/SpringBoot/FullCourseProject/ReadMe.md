@@ -613,3 +613,417 @@ return 해주는 값은 templates의 이름인 add-css-js-demo로 해주어야 v
 
 if else switch 모두 사용 가능
 
+
+
+# SpringBoot CRUD PJT
+
+![image-20221228220928087](./assets/image-20221228220928087.png)
+
+- dependencies
+  - lombok
+  - spring-web
+  - sql db
+  - data-jpa
+  - thymeleaf
+  - devtools
+
+- application.properties
+
+```properties
+spring.datasource.url = jdbc:mysql://localhost:3306/sms?useSSL=false
+spring.datasource.username = root
+spring.datasource.password = 1234
+
+#spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+#logging.level.org.hibernate.SQL = DE
+# 위의 두 코드는 입력시 오류 발생
+
+spring.jpa.hibernate.ddl-auto=update
+spring.devtools.livereload.enabled=true
+
+```
+
+보통 작성 순서
+
+Entity와 Repository에서 객체를 정의함 . DB테이블을 생성하고 연결
+
+controller에 주소와 변수를 설정하고 service에서 선언하고 serviceImpl에서 이를 정의하고 다시 Controller에서 작성하고 View와 연결
+
+
+
+- Entity.java
+
+```java
+package com.example.thymeleafspringbootdemo.entity;
+
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@Entity
+@Table(name = "Students")
+public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(name = "email")
+    private String email;
+
+    public Student() {
+    }
+    public Student(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+}
+```
+
+DB 테이블로 생성하기 위해서 Table과 Entity 그리고 Id와 Column을 설정함
+
+- StudentRepository.java
+
+```java
+package com.example.thymeleafspringbootdemo.repository;
+
+import com.example.thymeleafspringbootdemo.entity.Student;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+// @Repository
+// SimpleJpaRepository
+public interface StudentRepository extends JpaRepository<Student, Long> {
+
+}
+```
+
+jparepository는 인터페이스 / `JpaRepository<엔티티, ID 유형>`을 상속받아서 작성
+
+- StudentController.java
+
+```java
+package com.example.thymeleafspringbootdemo.controller;
+
+import com.example.thymeleafspringbootdemo.entity.Student;
+import com.example.thymeleafspringbootdemo.service.StudentService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+public class StudentController {
+
+    private StudentService studentService;
+
+    public StudentController(StudentService studentService) {
+        super();
+        this.studentService = studentService;
+    }
+    // studnet 리스트를 보여주는 view 연결
+    @GetMapping(value = "/students")
+    public String listStudents(Model model) {
+        model.addAttribute("students", studentService.getAllStudents());
+        return "students";
+    }
+	// createForm을 반환 view와 연결
+    @GetMapping(value = "/students/new")
+    public String createStudentForm(Model model) {
+        Student student = new Student();
+        model.addAttribute("student", student);
+        return "create_student";
+    }
+	// createForm에서 post방식으로 '/students'로 요청하는 경우 save 한다.
+    @PostMapping(value = "/students")
+    public String saveStudent(@ModelAttribute("student") Student student) {
+        studentService.saveStudent(student);
+        return "redirect:/students";
+        // redirect로 다른 view로 이동 가능
+    }
+
+    // updateForm을 반환 View와 연결
+    @GetMapping(value = "/students/edit/{id}")
+    public String editStudentForm(@PathVariable long id, Model model) {
+        model.addAttribute("student", studentService.getStudentById(id));
+        return "edit_student";
+    }
+	// createForm에서 post방식으로 '/students/{id}'로 요청하는 경우 update 한다.
+    @PostMapping(value = "/students/{id}")
+    public String updateStudent(@PathVariable Long id,
+                                @ModelAttribute("student") Student student,
+                                Model model) {
+        Student existingStudent = studentService.getStudentById(id);
+        // Id로 student 탐색
+        existingStudent.setFirstName(student.getFirstName());
+        existingStudent.setLastName(student.getLastName());
+        existingStudent.setEmail(student.getEmail());
+        // 해당 student를 받은 객체 student의 값으로 바꿈
+        studentService.editStudent(existingStudent);
+        // 이를 저장
+        return "redirect:/students";
+    }
+	// get 방식으로 '/students/{id}'를 요청하면 해당 student delete
+    @GetMapping(value = "/students/{id}")
+    public String deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudentById(id);
+        return "redirect:/students";
+    }
+}
+```
+
+- StudentService.java
+
+```java
+package com.example.thymeleafspringbootdemo.service;
+import com.example.thymeleafspringbootdemo.entity.Student;
+import java.util.List;
+
+public interface StudentService {
+    List<Student> getAllStudents();
+    Student saveStudent(Student student);
+    Student getStudentById(Long id);
+    Student editStudent(Student student);
+    void deleteStudentById(Long id);
+    // 설계도 밑바탕
+}
+```
+
+### interface
+
+일종의 추상 클래스
+
+구현된 것은 없고 그냥 밑바탕의 빈 설계도 느낌 / 메서드의 경우 `public abstract`가 자동으로 추가됨
+
+
+
+- StudentServiceImpl.java
+
+```java
+package com.example.thymeleafspringbootdemo.service.impl;
+
+import com.example.thymeleafspringbootdemo.entity.Student;
+import com.example.thymeleafspringbootdemo.repository.StudentRepository;
+import com.example.thymeleafspringbootdemo.service.StudentService;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+// service 구현
+// service로 부터 설계도를 상속 받아 이를 구현함(implements)
+public class StudentServiceImpl implements StudentService {
+
+    private StudentRepository studentRepository;
+
+    public StudentServiceImpl(StudentRepository studentRepository) {
+        super();
+        this.studentRepository = studentRepository;
+    }
+
+    @Override
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
+    }
+
+    @Override
+    public Student saveStudent(Student student) {
+        return studentRepository.save(student);
+    }
+
+    @Override
+    public Student getStudentById(Long id) {
+        return studentRepository.findById(id).get();
+    }
+
+    @Override
+    public Student editStudent(Student student) {
+        return studentRepository.save(student);
+    }
+
+    @Override
+    public void deleteStudentById(Long id) {
+        studentRepository.deleteById(id);
+    }
+}
+
+```
+
+- students.html
+
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+          crossorigin="anonymous">
+</head>
+<body>
+
+<!-- navbar -->
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+        <a class="navbar-brand mx-3"> Student Management System</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/students}"> Student Management</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+<br>
+<br>
+   <!-- student list -->
+  <div class="container">
+      <div class = "row">
+          <h1> List Students </h1>
+
+          <div class = "row">
+              <div class = "col-lg-3">
+                  <a th:href = "@{/students/new}" class = "btn btn-primary btn-sm mb-3"> Add Student </a>
+              </div>
+          </div>
+
+          <table class = "table table-striped table-bordered">
+              <thead class = "table-dark">
+                <tr>
+                    <th> Student First Name </th>
+                    <th> Student Second Name </th>
+                    <th> Student Email </th>
+                    <th> Actions </th>
+                </tr>
+              </thead>
+              <tbod>
+                  <tr th:each="student: ${students}">
+                      <td th:text = "${student.firstName}"></td>
+                      <td th:text = "${student.lastName}"></td>
+                      <td th:text = "${student.email}"></td>
+                      <td>
+                          <a th:href = "@{/students/edit/{id}(id=${student.id})}"
+                          class="btn btn-primary">Update</a>
+
+                          <a th:href = "@{/students/{id}(id=${student.id})}"
+                             class="btn btn-danger">Delete</a>
+                      </td>
+                  </tr>
+              </tbod>
+          </table>
+      </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+</body>
+</html>
+```
+
+thymeleaf로 연결할 때 주소는 `@{'address'}` / 변수는 `${'variable'}` 로 연결한다.
+
+- create_student.html // edit_student.html
+
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+  <title>Student Management System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+        crossorigin="anonymous">
+</head>
+<body>
+
+<!-- navbar -->
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+  <a class="navbar-brand mx-3">Student Management System</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/students}"> Student Management </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+    
+<br>
+<br>
+    <!-- createForm -->
+  <div class = "container">
+    <div class = "row">
+      <div class = "col-6 container justify-content-center card">
+        <h1 class = "text-center"> Create New Student</h1>
+        <div class = "card-body">
+          <form th:action="@{/students}" th:object="${student}" method="POST">
+            <div class = "form-group">
+              <label> Student First Name</label>
+              <input type="text" name = "firstName" class = "form-control" th:field="*{firstName}">
+            </div>
+            <div class = "form-group">
+              <label> Student Last Name</label>
+              <input type="text"
+              name = "lastName"
+              class = "form-control"
+              th:field="*{lastName}">
+            </div>
+            <div class = "form-group">
+              <label> Student Email</label>
+              <input type="text"
+              name = "email"
+              class = "form-control"
+              th:field="*{email}">
+            </div>
+
+            <div class = "box-footer">
+              <button type="submit" class = "btn btn-primary">Submit</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+```
+
+th:field는 해당 테이블 필드 이름으로 일치시켜야 함 / 그리고 `*{field}`로 필드를 선언해야함
+
+th:object는 controller에서 `@ModelAttribute("student") Student student` 로 받는다. `${'object'}`로 선언
+
+![image-20221228224714162](./assets/image-20221228224714162.png)
+
+![image-20221228224721944](./assets/image-20221228224721944.png)
+
+
+
+## livereload
+
+devtools를 dependencies에 추가하고
+
+- properties
+
+```properties
+spring.devtools.livereload.enabled=true
+```
+
+chrome 확장 프로그램설치 liveload
