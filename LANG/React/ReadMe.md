@@ -8,9 +8,9 @@
 
 - 데이터가 html에 자동 반영
 
+Angular PWA react-native 등을 이용하면 앱으로 발행 가능
 
-
-## Getting Start
+## Getting Start 
 
 ### 프로젝트 생성
 
@@ -161,3 +161,6 @@ component는 state를 변수로 적용하는 경우에는 사용하기 힘듦 / 
 App() {} 밖에 함수 component를 작성해야 함
 
 만약 component안에 여러 개의 div를 쓰고 싶다면 <> </> 묶어줄 수 있음 (react 문법)
+
+
+
