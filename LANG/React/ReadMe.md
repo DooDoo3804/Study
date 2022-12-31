@@ -162,5 +162,216 @@ App() {} 밖에 함수 component를 작성해야 함
 
 만약 component안에 여러 개의 div를 쓰고 싶다면 <> </> 묶어줄 수 있음 (react 문법)
 
+- index.js
+
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
+
+App template를 불러오고 `document.getElementById('root')`를 통해 index.html의 요소를 불러오게 됨
 
 
+
+## React 와 SpringBoot
+
+### frontend(react)
+
+아래는 react 디렉토리(VScode)
+
+![image-20221231175543764](./assets/image-20221231175543764.png)
+
+- EmployeeService.js
+
+```javascript
+import axios from 'axios'
+
+const EMPLOYEES_REST_API_URL = 'http://localhost:8080/api/employees';
+
+class EmployeeService{
+
+  getEmployees(){
+    return axios.get(EMPLOYEES_REST_API_URL);
+  }
+
+}
+
+export default new EmployeeService();
+```
+
+axios 설치 후 통신으로 backend의 주소와 통신한다
+
+
+
+- EmployeeComponent.js
+
+```react
+
+import React, { useEffect, useState } from 'react'
+import EmployeeService from '../services/EmployeeService'
+
+//rfc
+// react function component
+function EmployeeComponent() {
+
+  const [employees, setEmployees] = useState([])
+
+  useEffect(() => {
+    getEmployees()
+  }, [])
+
+  const getEmployees = () => {
+    EmployeeService.getEmployees().then((response) => {
+
+      setEmployees(response.data);
+      console.log(response.data);
+    });
+  }
+  return (
+    <div className='container'>
+      <h1 className='text-center'> Employees List </h1>
+      <table className='table table-striped'>
+        <thead>
+          <tr>
+            <th> Employee Id </th>
+            <th> First Name </th>
+            <th> Last Name </th>
+            <th> Email </th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+      // 아래는 js 문법 map
+            employees.map(
+              employee =>
+              <tr key = {employee.id}>
+                <td> {employee.id} </td>
+                <td> {employee.firstName} </td>
+                <td> {employee.lastName} </td>
+                <td> {employee.email} </td>
+              </tr>
+            )
+          }
+        </tbody>
+      </table>
+
+    </div>
+  )
+}
+
+export default EmployeeComponent
+```
+
+react function component 로 작성 (App.js와 같은 component)
+
+#### useEffect
+
+`useEffect( () => {params1} , [params2])`
+
+Hook / 컴포넌트가 마운트 됐을 때(처음 나타날 때 / 사라질 때 / 특정 props가 바뀔 때) 특정 작업을 처리하는 방법
+
+params2 가 비어있다면 컴포넌트가 처음 나타날때(렌더링)에만 userEffect의 이벤트 params1가 호출
+
+cleanup 함수는 컴포넌트가 사라질 때 호출됨
+
+- 마운트 시에 하는 작업들
+  - props 로 받은 값을 컴포넌트의 로컬 상태로 설정
+  - 외부 API 요청
+  - 라이브러리 사용
+  - sefinterval을 통한 반복잡업 혹은 setTimeout을 통한 작업 예약
+  - 
+
+
+
+
+
+
+
+- App.js
+
+```javascript
+import './App.css';
+import EmployeeComponent from './component/EmployeeComponent';
+
+function App() {
+  return (
+    <EmployeeComponent/>
+      // 템플릿 상태로 들어감
+  );
+}
+
+export default App;
+```
+
+
+
+### backend(springboot)
+
+![image-20221231221410868](./assets/image-20221231221410868.png)
+
+```java
+package com.example.springbootpjtbackend.controller;
+
+
+import com.example.springbootpjtbackend.entity.Employee;
+import com.example.springbootpjtbackend.repository.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api")
+@CrossOrigin("http://localhost:3000/")
+// frontend 주소
+public class EmployeeController {
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @GetMapping(value = "/employees")
+    private List<Employee> fetchEmployee() {
+        return employeeRepository.findAll();
+    }
+
+
+}
+```
+
+#### @CrossOrigin
+
+웹페이지의 제한된 자원을 외부 도메인에서 접근을 허용해주는 매커니즘
+
+서로 다른 도메인에서 리소스를 공유하는 방식
+
+CORS를 스프링을 통해 설정할 수 있는 어노테이션 기능 / 복수인 경우 콤마(,)로 구분
+
+
+
+![image-20221231180046050](./assets/image-20221231180046050.png)
+
+
+
+### Bootstrap
+
+`import 'bootstrap/dist/css/bootstrap.min.css';`
+
+`npm install bootstrap`을 한 뒤 위의 코드를 index.js에 추가해줌
