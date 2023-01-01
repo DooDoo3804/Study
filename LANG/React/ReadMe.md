@@ -186,6 +186,86 @@ reportWebVitals();
 
 App template를 불러오고 `document.getElementById('root')`를 통해 index.html의 요소를 불러오게 됨
 
+### props
+
+- App.js
+
+```react
+function App() {
+  return (
+    <Wrapper>
+      <Hello name="react" color="red" isSpecial={true}/>
+      <Hello color="pink" />
+    </Wrapper>
+  )
+}
+```
+
+​	`console.log(props)`를 해보면 `{name : 'react', color='red'}` 가 찍힌다. 아래에서 props라고 전체적으로 받아도 됨
+
+- Hello.js
+
+```react
+import React from 'react';
+
+function Hello({ color, name, isSpecial }) {
+  return (
+    <div style={{ color }}>
+      { isSpecial ? <b>*</b> : null }
+      안녕하세요 {name}
+    </div>
+  );
+}
+
+Hello.defaultProps = {
+  name: '이름없음'
+}
+
+export default Hello;
+```
+
+삼항 연산자를 이용하면 조건부로 렌더링 가능
+
+### input 상태
+
+```react
+import React, { useState } from 'react';
+
+function InputSample() {
+  const [text, setText] = useState('');
+
+  const onChange = (e) => {
+    setText(e.target.value);
+  };
+
+  const onReset = () => {
+    setText('');
+  };
+
+  return (
+    <div>
+      <input onChange={onChange} value={text}  />
+      <button onClick={onReset}>초기화</button>
+      <div>
+        <b>값: {text}</b>
+      </div>
+    </div>
+  );
+}
+
+export default InputSample;
+```
+
+
+
+## Build
+
+```shell
+npm run build
+```
+
+위를 입력하면 배포를 위한 build를 시작함
+
 
 
 ## React 와 SpringBoot
@@ -375,3 +455,93 @@ CORS를 스프링을 통해 설정할 수 있는 어노테이션 기능 / 복수
 `import 'bootstrap/dist/css/bootstrap.min.css';`
 
 `npm install bootstrap`을 한 뒤 위의 코드를 index.js에 추가해줌
+
+
+
+## SPA (React-router)
+
+SPA를 만들기 위함
+
+```shell
+yarn add react-router-dom
+npm add react-router-dom
+```
+
+라우터 적용은 index.js에서 BrowserRouter 라는 컴포넌트를 사용하여 구현
+
+- index.js
+
+```react
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+//  <React.StrictMode>
+    <BrowserRouter>
+    <App />
+    </BrowserRouter>
+//  </React.StrictMode>
+);
+```
+
+위 처럼 App을 BrowserRouter로 감싸준다.
+
+렌더링 할 페이지를 js로 만든다.
+
+```react
+<Route path="{주소 규칙}" component={'보여줄 컴포넌트 이름'}/>
+```
+
+위처럼 Route를 이용하면 주소규칙에 따라 컴포넌트를 불러온다.
+
+만약 하위 주소와 상위 주소의 일부가 같으면 둘다 불러오는 문제가 있음
+
+이는 아래처럼 `exact={true}`를 통해 props를 설정하면 정확히 그 주소일 때만 나온다.
+
+```react
+import React from 'react';
+import { Route } from 'react-router-dom';
+import About from './About';
+import Home from './Home';
+
+const App = () => {
+  return (
+    <div>
+      <Route path="/" exact={true} component={Home} />
+      <Route path="/about" component={About} />
+    </div>
+  );
+};
+```
+
+만약 `	  <Route path="/"component={Home} />` 처럼 작성하면 /about 페이지를 들어갔을 때 home과 about 두 컴포넌트 모두 불러옴
+
+a 태그를 사용하면 페이지를 새로 불러오기 때문에 현재 페이지 렌더링상태가 초기화 된다. 따라서 이 경우 Link를 사용하면 됨
+
+```react
+import React from 'react';
+import { Route, Link } from 'react-router-dom';
+import About from './About';
+import Home from './Home';
+
+const App = () => {
+  return (
+    <div>
+      <ul>
+        <li>
+          <Link to="/">홈</Link>
+        </li>
+        <li>
+          <Link to="/about">소개</Link>
+        </li>
+      </ul>
+      <hr />
+      <Route path="/" exact={true} component={Home} />
+      <Route path="/about" component={About} />
+    </div>
+  );
+};
+
+export default App;
+```
+
+렌더링 하여 주소만 바꿀 뿐 페이지를 새로 불러오는 것은 아니다.
+
