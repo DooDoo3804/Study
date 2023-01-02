@@ -545,3 +545,86 @@ export default App;
 
 렌더링 하여 주소만 바꿀 뿐 페이지를 새로 불러오는 것은 아니다.
 
+
+
+# React CRUD PJT
+
+## React + SpringBoot
+
+### Front-End (React)
+
+`npm install react-router-dom@5`
+
+라우터 v5를 설치
+
+- route v5
+  - Switch를 사용
+    - 아래에서 처럼 Route안의 component로 컴포넌트 이름을 작성
+  - this.props.history.push('{주소}')
+    - 다음 주소로 이동 가능
+- route v6+
+  - Routes사용
+    - Route안의 element안에 컴포넌트 이름을 작성
+  - this.props.history.push() 사용 불가 / useNavitage 를 대신 사용
+    - useNavigate().setState() 를 사용 / 이후 문서 확인 必
+
+- App.js
+
+```react
+import './App.css';
+import ListEmployeeComponent from './components/ListEmployeeComponent';
+import HeaderComponent from './components/HeaderComponent';
+import FooterComponent from './components/FooterComponent';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import CreaeteEmployeeComponent from './components/CreaeteEmployeeComponent';
+function App() {
+  return (
+    <div>
+      <Router>
+        <HeaderComponent/>
+        <div className='container'>
+          {/*  react-router-dom v6 부터는 Switch대신 Routes를 사용 */}
+          {/*  component 대신에 element 사용 */}
+          <Switch>
+            <Route path = "/" exact={true} component = {ListEmployeeComponent}></Route>
+            <Route path = "/employees" component = {ListEmployeeComponent}></Route>
+            <Route path = "/add-employee" component = {CreaeteEmployeeComponent}></Route>
+          </Switch>
+        </div>
+        <FooterComponent/>
+      </Router>
+    </div>
+    
+  );
+}
+export default App;
+```
+
+- EmployeeService
+
+```javascript
+import axios from 'axios';
+
+const EMPLOYEE_API_BASE_URL = "http://localhost:8080/api/v1/employees";
+
+class EmployeeService {
+
+  getEmployees() {
+    return axios.get(EMPLOYEE_API_BASE_URL);
+  }
+
+  createEmployee(employee) {
+    return axios.post(EMPLOYEE_API_BASE_URL, employee);
+  }
+}
+export default new EmployeeService()
+```
+
+axios 통신 service를 기재
+
+
+
+### Back-End (SpringBoot)
+
+
+
