@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import EmployeeService from '../services/EmployeeService';
 
-export default class CreaeteEmployeeComponent extends Component {
+export default class UpdateEmployeeComponent extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
+            id : this.props.match.params.id,
             firstName : '',
             lastName : '',
             email : '',
@@ -13,19 +14,30 @@ export default class CreaeteEmployeeComponent extends Component {
         this.changeFirstNameHandler = this.changeFirstNameHandler.bind(this);
         this.changeLastNameHandler = this.changeLastNameHandler.bind(this);
         this.changeEmailHandler = this.changeEmailHandler.bind(this);
-        this.saveEmployee = this.saveEmployee.bind(this);
-
+        this.updateEmployee = this.updateEmployee.bind(this);
     }
-    saveEmployee = (e) => {
+
+    componentDidMount() {
+        EmployeeService.getEmployeeById(this.state.id).then((res) => {
+            let employee = res.data;
+            this.setState({firstName: employee.firstName,
+            lastName: employee.lastName,
+            email : employee.email
+            })
+        })
+    }
+
+    updateEmployee = (e) => {
         e.preventDefault();
         let employee = {
             firstName : this.state.firstName,
             lastName : this.state.lastName,
             email : this.state.email,
         }
-        EmployeeService.createEmployee(employee).then((res) => {
-            this.props.history.push('/employees');
+        EmployeeService.updateEmployee(employee, this.state.id).then((res) => {
+            this.props.history.push('/employees')
         })
+        
     }
     changeFirstNameHandler = (event) => {
         this.setState({firstName: event.target.value});
@@ -46,7 +58,7 @@ export default class CreaeteEmployeeComponent extends Component {
         <div className='container' style={{marginTop:"20px"}}>
             <div className='row'>
                 <div className='card col-md-6 offset-md-3 offset-md-3'>
-                    <h3 className='text-center'>Add Employee</h3>
+                    <h3 className='text-center'>Update Employee</h3>
                     <div className='card-body'>
                         <form>
                             <div className='form-group my-3'>
@@ -65,7 +77,7 @@ export default class CreaeteEmployeeComponent extends Component {
                                 value = {this.state.email} onChange={this.changeEmailHandler}/>
                             </div>
 
-                            <button className='btn btn-success' onClick={this.saveEmployee}>Save</button>
+                            <button className='btn btn-success' onClick={this.updateEmployee}>Save</button>
                             <button className='btn btn-danger' onClick={this.cancel.bind(this)} style={{marginLeft:"10px"}}>Cancel</button>
 
                         </form>

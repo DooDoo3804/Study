@@ -11,7 +11,7 @@ export default class ListEmployeeComponent extends Component {
             employees: []
         }
         this.addEmployee = this.addEmployee.bind(this)
-        
+        this.editEmployee = this.editEmployee.bind(this)
     }
     componentDidMount () {
         EmployeeService.getEmployees().then((res) => {
@@ -24,6 +24,11 @@ export default class ListEmployeeComponent extends Component {
         // useNavigate 해야됨
         this.props.history.push('/add-employee');
     }
+
+    editEmployee(id) {
+        this.props.history.push(`/update-employee/${id}`);
+    }
+
   render() {
     return (
       <div>
@@ -47,6 +52,7 @@ export default class ListEmployeeComponent extends Component {
                                 <td> {employee.firstName} </td>
                                 <td> {employee.lastName} </td>
                                 <td> {employee.email} </td>
+                                <td> <button className='btn btn-info text-white' onClick={()=> this.editEmployee(employee.id)} >UPDATE</button> </td>
                             </tr>
                         )
                     }
