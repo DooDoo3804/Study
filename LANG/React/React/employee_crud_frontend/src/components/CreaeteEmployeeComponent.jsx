@@ -6,6 +6,7 @@ export default class CreaeteEmployeeComponent extends Component {
         super(props)
 
         this.state = {
+            id : this.props.match.params.id,
             firstName : '',
             lastName : '',
             email : '',
@@ -16,6 +17,18 @@ export default class CreaeteEmployeeComponent extends Component {
         this.saveEmployee = this.saveEmployee.bind(this);
 
     }
+    componentDidMount() {
+        if(this.state.id === -1) return
+        else {
+            EmployeeService.getEmployeeById(this.state.id).then((res) => {
+                let employee = res.data;
+                this.setState({firstName : employee.firstName,
+                lastName : employee.lastName,
+                email : employee.email})
+            }) 
+        }
+    }
+
     saveEmployee = (e) => {
         e.preventDefault();
         let employee = {
@@ -23,10 +36,17 @@ export default class CreaeteEmployeeComponent extends Component {
             lastName : this.state.lastName,
             email : this.state.email,
         }
-        EmployeeService.createEmployee(employee).then((res) => {
-            this.props.history.push('/employees');
-        })
+        if (this.state.id === -1) {
+            EmployeeService.createEmployee(employee).then((res) => {
+                this.props.history.push('/employees');
+            })
+        } else {
+            EmployeeService.updateEmployee(employee, this.state.id).then((res) => {
+                this.props.history.push('/employees');
+            })
+        }
     }
+    
     changeFirstNameHandler = (event) => {
         this.setState({firstName: event.target.value});
     }

@@ -22,11 +22,11 @@ export default class ListEmployeeComponent extends Component {
     addEmployee () {
         // react-router-dom v6 부터는 this.props.history.push() 불가능
         // useNavigate 해야됨
-        this.props.history.push('/add-employee');
+        this.props.history.push('/add-employee/-1');
     }
 
     editEmployee(id) {
-        this.props.history.push(`/update-employee/${id}`);
+        this.props.history.push(`/add-employee/${id}`);
     }
 
   render() {
