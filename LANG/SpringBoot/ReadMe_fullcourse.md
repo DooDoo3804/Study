@@ -160,19 +160,23 @@ public class StudentController {
 
 ### @Autowired
 
-필요한 의존 객체의 타입에 해당하는 빈(Bean)을 찾아 주입한다. (생성자, setter, 필드)
+필요한 의존 객체의 타입에 해당하는 빈(Bean)을 찾아 주입한다. (생성자, setter, 필드, 다중 인자 멧서드)
 
 DI(Dependenct Injection) 의존성 종속 - 클래스간의 의존 관계를 스프링 컨테이너가 자동으로 연결
 
-Autowired를 설정한 메서드가 자동으로 호출되고, 인스턴스가 자동으로 주입됨
+Autowired를 설정한 메서드가 자동으로 호출되고, 인스턴스가 자동으로 주입됨 (스프링 지원)
+
+기본적으로 타입을 기준으로 의존성을 주입하기 때문에 여러 개인 경우 그것을 특정하여 주입할 수 없음. 이때 사용하는 것이 `@Quilifier` 이다.
 
 ### @Qualifier
 
 Autowired로 연결한 빈 목록에서 유일한 빈을 구별함 (예 @Qualifier(value = "빈이름") )
 
-연결할 빈의 값 타입을 지정 (예 @Qualifier("serviceName") )
+연결할 빈의 값 타입을 지정 (예 @Qualifier("serviceName") ) (스프링 지원)
 
+### @Resource
 
+필드와 세터 주입만 지원
 
 
 
@@ -199,6 +203,12 @@ spring.datasource.password=1234
 spring.jpa.hibernate.ddl-auto=update
 
 ```
+
+spring.jpa.properties.hibernate.dialect 설정 시 그대로 붙여 넣으면 오류가 발생할 수 있음
+
+![image-20230106100001485](assets\image-20230106100001485.png)
+
+위에 처럼 자동으로 Dialect가 설정이 됨
 
 - pom.xml
 
@@ -532,6 +542,8 @@ controller.java 에서 @RestController를 쓰면 thymeleaf를 사용하지 못�
 
 ![image-20221227163008394](./assets/image-20221227163008394.png)
 
+static/index.html 을 만들면 localhost:8080 주소에 메인 페이지가 뜬다.
+
 ### 변수
 
 - helloworldController.js
@@ -615,7 +627,7 @@ if else switch 모두 사용 가능
 
 
 
-# SpringBoot CRUD PJT
+## SpringBoot CRUD PJT with thymeleaf
 
 ![image-20221228220928087](./assets/image-20221228220928087.png)
 
@@ -800,8 +812,6 @@ public interface StudentService {
 일종의 추상 클래스
 
 구현된 것은 없고 그냥 밑바탕의 빈 설계도 느낌 / 메서드의 경우 `public abstract`가 자동으로 추가됨
-
-
 
 - StudentServiceImpl.java
 

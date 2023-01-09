@@ -568,6 +568,14 @@ export default App;
   - this.props.history.push() 사용 불가 / useNavitage 를 대신 사용
     - useNavigate().setState() 를 사용 / 이후 문서 확인 必
 
+여기서 rcc를 이용해 작성했지만, rfc로 작성이 권장됨
+
+App.js에 Routes/Switch로 전환할 컴포넌트들을 조건에 따라 기재
+
+해당 컴포넌트를 작성
+
+필요한 Service를 작성 (axios같은 API 통신을 포함)
+
 - App.js
 
 ```react
@@ -625,6 +633,4 @@ axios 통신 service를 기재
 
 
 ### Back-End (SpringBoot)
-
-
 
