@@ -22,3 +22,27 @@ Spring Boot는 준비된 메인 페이지가 없음 -> Whitelabel Error Page를 
 
 
 
+정적 파일 static 폴더 안에 html을 작성하면 재시작 없이 반영?
+
+요새는 gradle을 많이 사용하는 추세 / 이는 안드로이드에서도 사용 가능
+
+
+
+## model
+
+### @Controller
+
+templates에 있는 view page를 리턴
+
+보통 thymleaf에서 사용?
+
+### @RestController
+
+어떤 값을 return
+
+
+
+스프링 부트 프레임워크 MVC 패턴
+
+
+
