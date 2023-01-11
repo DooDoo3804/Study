@@ -1,4 +1,4 @@
-# Spring
+# Spring Tutorial
 
 based on IntelliJ
 
