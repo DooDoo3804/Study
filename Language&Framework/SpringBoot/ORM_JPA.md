@@ -1,6 +1,11 @@
 # 자바 ORM 표준 JPA 프로그래밍
 
+- [04 엔티티 매핑](04-엔티티-매핑)
+- [05 연관 관계 매핑](05-연관-관계-매핑)
+- [06 다양한 연관관계 매핑](06-다양한-연관관계-매핑)
+- [07  고급 매핑](07 -고급-매핑)
 
+------
 
 ## 04 엔티티 매핑
 
@@ -301,4 +306,66 @@ SELECT * FROM MEMBER;
 #### 단일 테이블 전략
 
 하나의 테이블만 사용
+
+일반적으로 가장 빠르지만 자식 엔티티가 모두 null을 허용해야 함 / 구분 칼럼을 필수로 사용해야 함
+
+- @DiscriminatorColumn(name="DTYPE")
+  - 필수로 설정해야 함
+  - DIscriminatorValue를 지정하지 않으면 기본으로 엔티티 이름을 사용(예: Movie, Album등)
+
+#### 구현 클래스마다 테이블 전략
+
+자식 엔티티마다 테이블을 만듦
+
+이는 데이터베이스 설계자, ORM전문가 모두 추천하지 않음
+
+### @MappedSuperclass
+
+부모 클래스는 테이블과 매핑하지 않고 부모 클래스를 상속받는 자식 믈래스에게 매핑 정보만 제공하고 싶으면 @MappedSuperclass를 사용
+
+@Entity와 비슷하지만 실제 테이블과 매핑되지 않는 차이점이 있다. 단순히 매핑 정보를 상속할 목적으로만 사용됨
+
+![image-20230115234025730](./assets/image-20230115234025730.png)
+
+연관 관계를 재정의 하려면 @AssociationOverride를 사용 / 만약 여러 개라면 @AssociationOverrides를 사용
+
+```java
+@Entity
+@AttributeOverride(name = "id", column = @Column(name = "member_id"))
+public class Member extends BaseEntity {...}
+
+@Entity
+@AttributeOverrides({
+  @AttributeOverride(name = "id", column = @Column(name = "member_id"))
+  @AttributeOverride(name = "name", column = @Column(name = "member_name"))
+})
+public class Member extends BaseEntity {...}
+```
+
+- 테이블과 매핑되지 않고 자식 클래스에 엔티티의 매핑 정보를 상속하기 위해 사용
+- @MappedSuperclass로 지정한 클래스는 엔티티가 아니므로 영속성 관리 대상이 아님
+- 이 클래스를 직접 생성해서 사용하지 않음 추상 클래스로 만드는 것을 권장
+
+### 복합 키와 식별 관계 매핑
+
+#### 식별 관계
+
+부모 테이블의 기본 키를 내려받아서 자식 테이블의 기본 키 + 외래 키로 사용하는 관계
+
+![image-20230115234611940](./assets/image-20230115234611940.png)
+
+PARENT 테이블의 기본 키 PARENT_ID를 받아 CHILD 테이블의 기본 키 + 외래 키로 사용
+
+#### 비식별 관계
+
+부모 테이블의 기본 키를 받아서 자식 테이블의 외래 키로만 사용하는 관계
+
+![image-20230115235351798](./assets/image-20230115235351798.png)
+
+- 필수적 비식별 관계 : 외래 키에 NULL을 허용하지 않음. 연관관계를 필수적으로 맺어야 함
+- 선택적 비식별 관계 : 외래 키에 NULL을 허용. 연관관계를 맺을지 말지 선택할 수 있음
+
+##### 복합키 : 비식별 관계 매핑
+
+JPA에서는 식별자를 둘 이상 사용하려면 별도의 식별자 클래스를 만들어어야 함
 
