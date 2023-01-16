@@ -3,7 +3,7 @@
 - [04 엔티티 매핑](#04-엔티티-매핑)
 - [05 연관 관계 매핑](#05-연관-관계-매핑)
 - [06 다양한 연관관계 매핑](#06-다양한-연관관계-매핑)
-- [07  고급 매핑](#07-고급-매핑)
+- [07 고급 매핑](#07-고급-매핑)
 
 ------
 
@@ -284,7 +284,7 @@ SELECT * FROM MEMBER;
 
 데이터베이스에서 자동으로 생성해주는 대리 키를 Long 값으로 사용하는 것.  간편하고 반 영구적으로 쓸 수 있으며 비즈니스에 의존하지 않음, ORM매핑 시에 복합 키를 만들지 않아도 됨
 
-## 07  고급 매핑
+## 07 고급 매핑
 
 ### 상속 관계 매핑
 
@@ -369,3 +369,71 @@ PARENT 테이블의 기본 키 PARENT_ID를 받아 CHILD 테이블의 기본 키
 
 JPA에서는 식별자를 둘 이상 사용하려면 별도의 식별자 클래스를 만들어어야 함
 
+식별자가 하나면 상관 없지만, 2개 이상이면 별도의 식별자 클래스를만들고 equals와 hashCode를 구현해야 함([링크](#양방향))
+
+- IdClass : 관계형 데이터베이스에 가까운 방법
+- EmbededId : 객체지향에 가까운 방법
+
+##### 복합키 : 식별 관계 매핑
+
+식별 관계에서 자식 테이블은 부모 테이블의 기본 키를 포함해서 복합 키를 구성해야 하므로 @IdClass나 @EmbededId를 사용해서 식별자를 매핑해야 함
+
+@EmbededId로 식별 관계를 구성할 때는 @MapsId를 사용해야 함
+
+- @MapsId
+  - 외래 키와 매핑한 연관관계를 기본 키에도 매핑하겠다는 뜻
+
+##### 식별, 비식별 관계의 장단점
+
+- 식별 관계는 부모 테이블의 기본 키를 자식 테이블로 전파하면서 자식 테이블의 기본 키 칼럼이 점점 늘어남, 조인할 때 SQL이 복잡해지고 기본 키 인덱스가 불필요하게 커질 수 있음
+- 식별 관계는 2개 이상의 칼럼을 합해서 복합 기본 키를 만들어야 하는 경우가 많음
+- 식별 관계를 사용할 때 기본 키로 비즈니스 의미가 있는 자연 키칼럼을 조합하는 경우가 많음, 반면 비식별이라면 대리 키를 주로 사용
+- 식별관계는 부모 테이블의 기본 키를 자식 테이블의 기본 키로 사용하므로 비식별 관계 보다 테이블 국조가 유연하지 못함
+- JPA에서 복합 키는 별도의 복합 키 클래스를 만들어서 사용해야 하므로 번거로움
+- 비식별 관계의 기본 키는 주로 대리키를 사용하는데 JPA는 대리 키를 생성하기 위한 편리한 방법을 제공
+
+위와 같은 이유들로 비 식별관계로 설계하는 것이 권장
+
+### 조인 테이블
+
+기본은 조인 칼럼을 사용하고 필요하다고 판단되면 조인 테이블을 사용
+
+#### 일대일 조인 테이블
+
+![image-20230116171732184](C:\Users\SSAFY\Desktop\GIT\study\Language&Framework\SpringBoot\assets\image-20230116171732184.png)
+
+```java
+public class Parent {
+
+  @Id @GeneratedValue
+  @Column(name = "parent_id")
+  private Long id;
+  private String name;
+
+  @OneToOne
+  @JoinTable(name = "parent_child",
+  joinColumns = @JoinColumn(name = "parent_id"),
+  inverseJoinColumns = @JoinColumn(name = "child_id"))
+  private Child child;
+
+}
+```
+
+@JoinTable
+
+- name
+  - 매핑할 조인 테이블 이름
+- joinColumns
+  - 현재 엔티티를 참조하는 외래 키
+- inverseJoinColumns
+  - 반대 방향 엔티티를 참조하는 외래 키
+
+양방향으로 매핑하려면 아래의 코드를 추가하면 됨
+
+```java
+public class Child {
+  ...
+  @OneToOne(mappedBy="child")
+  private Parent parent;
+}
+```
