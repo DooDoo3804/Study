@@ -437,3 +437,7 @@ public class Child {
   private Parent parent;
 }
 ```
+
+### 엔티티 하나에 여러 테이블 매핑
+
+ 
