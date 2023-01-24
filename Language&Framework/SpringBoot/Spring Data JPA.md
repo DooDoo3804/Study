@@ -89,5 +89,88 @@ spring.jpa.properties.hibernate.format_sql=true
 
 
 
+## @Table
+
+attributes
+
+- name
+
+  - 테이블 이름
+
+- schema
+
+  - DB에 있는 schema 이름
+
+- @UniqueConstraint
+
+  - unique 제약 조건
+
+  ```java
+  @Table(name = "products",
+          schema = "ecommerce",
+          uniqueConstraints = {
+              @UniqueConstraint(
+                  name = "sku_unique",
+                  columnNames = "sku"
+          )
+      }
+  )
+  ```
+
+  
+
+### PK Generation Strategy
+
+- AUTO
+
+  - default generation strategy
+  - MySQL에서는 pk로서 sequence를 유지하기 위해 독립적인 table을 만든다
+
+  ![image-20230124223033348](./assets/image-20230124223033348.png)
+
+- IDENTITY
+
+  - relies on the  database auto-increment column
+  - not good for JDBC batch operations
+
+- TABLE
+
+  - 만약 table에서 sequence를 지원해준다면 SEQUENCE를 사용하는 것이 낫다.
+
+- SEQUENCE
+
+  - @SequenceGenerator 가 필요
+
+  ```java
+  @GeneratedValue(
+  	strategy = GenerationType.SEQUENCE,
+  	generator = "product_generator"
+  )
+  @SequenceGenerator(
+  	name = "product_generator",
+  	sequenceName = "product_sequence_name",
+  	allocationSize = 1
+  )
+  ```
+
+  
+
+## Hibernate Annotations
+
+```java
+@CreationTimestamp
+private LocalDateTime dateCreated;
+@UpdateTimestamp
+private LocalDateTime lastUpdated;
+```
+
+생성 날짜는 @CreationTimestamp
+
+수정 날짜는 @UpdateTimestamp
+
+### Lombok
+
+lombok을 사용하면 Getter Setter AllArgsConstructor NoArgsConstructor 등 을 사용할 수 있음
+
 
 
