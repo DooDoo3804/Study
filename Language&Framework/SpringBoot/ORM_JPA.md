@@ -440,4 +440,9 @@ public class Child {
 
 ### 엔티티 하나에 여러 테이블 매핑
 
- 
+ @SecondaryTable을 사용하면 한 엔티티에 여러 테이블을 매핑할 수 있음
+
+- @Secondary.name : 매핑할 다른 테이블의 이름
+- @Secondary.pkJoinColumns : 매핑할 다른 테이블의 기본 키 칼럼 속성
+
+이 방법은 항상 두 테이블을 조회하므로 최적화가 힘듦 
