@@ -35,6 +35,26 @@ Maven이 더 높은 점유율을 가지고 있음
 
 
 
+## Build 및 배포
+
+우측 nav바에서 maven을 확장
+
+![image-20230126135149502](assets/image-20230126135149502.png)
+
+왼쪽 backend의 lifecycle에서 package를 선택하고 실행을 하면 빌드를 시작함
+
+![image-20230126135259341](assets/image-20230126135259341.png)
+
+좌측의 navbar에서 target 폴더에 {프록젝트 이름}{버전}.jar 파일이 생성된다.
+
+```shell
+java -jar {파일이름}.jar
+```
+
+위의 코드를 실행하면 배포한 프로젝트를 실행할  수 있다.
+
+
+
 ## Swagger
 
 서버로 요청되는 API 리스트를 html 화면으로 문서화 하여 테스트 가능
