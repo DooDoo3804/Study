@@ -24,6 +24,59 @@ VMware 등을 사용하여 가상환경으로 Ubuntu를 설치하고, docker를 
 
 Dockerfile을 만들고 Image를 만든다음 container에 등록하여 사용
 
+```
+docker run [OPTIONS] IMAGE[:TAG|@DIGEST] [COMMAND] [ARG...]
+# 아래는 자주 사용하는 옵션
+# -d : detached mode 백그라운드 모드
+# -p : 호스트와 컨테이너의 포트를 연결
+# -v : 호스트와 컨테이너의 디렉토리를 연결
+# -name : 컨테이너 이름 설정
+# -rm : 프로세스 종료시 컨테이너 자동 제거
+# -it : 터미널 입력을 위한 옵션
+# /bin/bash : 컨테이너 내부에 들어가기 위해 사용
+```
+
+
+
+## GitLab
+
+도커에 gitlab 설치
+
+```
+docker pull gitlab/gitlab-ce
+```
+
+컨테이너 실행 (gitlab으로)
+
+```
+docker run --detach \
+> --name gitlab \
+> --hostname gitlab.example.com \
+> --publish 4000:80 \
+> --restart always \
+> gitlab/gitlab-ce
+```
+
+gitlab 계정 비밀번호 초기화 (root계정)
+
+```
+gitlab-rails console -e production
+# 이후 아래를 따라 입력
+user = User.where(id:1).first
+user.password = ''
+user.password_confirmation = ''
+user.save
+exit
+```
+
+
+
+
+
+
+
+
+
 ## Errors
 
 ### docker for windows 실행시 getting start 계속 나올 때
@@ -56,12 +109,19 @@ sudo usermod -a -G docker $USER
 
 ## Dockerfile
 
+도커 이미지를 만들기 위해 Dickerfile에 DSL 언어를 사용해 이미지를 생성
+
+
+
 ```dockerfile
 FROM {baseImage}
 # 맨 처음에는 baseImage를 설정해야 함
 WORKDIR {directory}
 # 어떤 directory에 application을 복사해 올 것인지 작성
-
+FROM <image>:<tag>
+# 베이스 이미지를 지정 / tag는 버전을 의미
+RUN <command>
+# 명령어를 실행
 ```
 
 변경이 잦은 layer는 낮은(밑에) 작성하면 된다.
