@@ -634,6 +634,28 @@ Entity에 의해 생성된 데이터베이스에 접근하는 메서드를 사�
 
 데이터 베이스에 적용할 CRUD를 정의 
 
+#### repository 설정
+
+Query 메소드에 **포함할 수 있는 키워드**는 다음과 같다.
+
+| **메서드 이름 키워드** | **샘플**                                           | **설명**                           |
+| ---------------------- | -------------------------------------------------- | ---------------------------------- |
+| And                    | findByEmailAndUserId(String email, String userId)  | 여러필드를 and 로 검색             |
+| Or                     | findByEmailOrUserId(String email, String userId)   | 여러필드를 or 로 검색              |
+| Between                | findByCreatedAtBetween(Date fromDate, Date toDate) | 필드의 두 값 사이에 있는 항목 검색 |
+| LessThan               | findByAgeGraterThanEqual(int age)                  | 작은 항목 검색                     |
+| GreaterThanEqual       | findByAgeGraterThanEqual(int age)                  | 크거나 같은 항목 검색              |
+| Like                   | findByNameLike(String name)                        | like 검색                          |
+| IsNull                 | findByJobIsNull()                                  | null 인 항목 검색                  |
+| In                     | findByJob(String … jobs)                           | 여러 값중에 하나인 항목 검색       |
+| OrderBy                | findByEmailOrderByNameAsc(String email)            | 검색 결과를 정렬하여 전달          |
+
+
+
+
+
+
+
 ### DAO
 
 데이터베이스에 접근하는 객체를 의미
