@@ -1,6 +1,14 @@
 # Spring Tutorial
 
-based on IntelliJ
+> based on IntelliJ
+
+------
+
+- [MQTT 통신](https://github.com/DooDoo3804/Study/blob/master/Language%26Framework/SpringBoot/MQTT%ED%86%B5%EC%8B%A0.md)
+- [SpringBoot Fullcourse Summary](https://github.com/DooDoo3804/Study/blob/master/Language%26Framework/SpringBoot/SpringBoot_fullcourse.md)
+- [ORM JPA 표준](https://github.com/DooDoo3804/Study/blob/master/Language%26Framework/SpringBoot/ORM_JPA.md)
+
+------
 
 ## Maven과 Gradle
 
@@ -128,7 +136,21 @@ public class SwaggerConfiguration {
 
 config 패키지를 생성하여 위와 같이 작성하면 Sweager를 들어갈 수 있음
 
+### 오류 해결
 
+`Failed to start bean 'documentationPluginsBootstrapper';`
+
+위와 같은 오류는 spring과 swagger 사이의 버전이 호환되지 않아서 발생
+
+- spring 을 2.4.2로 낮춤
+
+  - 실행해 보니 3.0.0도 정상 작동
+
+  > 아래의 코드만 추가하면 되는 것 같다
+
+- properties에 다음과 같은 코드 추가
+
+  - `spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER`
 
 ## Lombok
 
