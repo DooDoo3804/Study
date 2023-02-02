@@ -51,7 +51,157 @@ admin 까지 등록하면 다음과 같은 화면이 나온다.
 
 ![image-20230126095631153](assets/image-20230126095631153.png)
 
-## WebHook
+이후 필요한 플러그인을 찾아서 설치하면 됨
 
-jenkins와 webhook을 연동하기 위해서는 github에서 AccessToken이 필요함
+------
+
+## local 환경에서 CI/CD 구축
+
+### :one: CI
+
+### Jenkins 안에 Docker 설치하기
+
+#### 1. 도커 설치
+
+✔ 패키지들이 최신 버전인지 확인
+
+```sql
+sudo apt-get update && upgrade
+```
+
+✔ apt가 HTTPS를 통해 repository를 이용하는 것을 허용할 수 있도록 해주는 패키지들 설치
+
+```sql
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+```
+
+✔ docker 공식 GPG key 추가
+
+```bash
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+```
+
+✔ docker repository를 등록
+
+```bash
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+✔ docker 설치
+
+```sql
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+```
+
+#### 2. Jenkins 설치
+
+✔ Jenkins 설치 및 컨테이너 구동
+
+```javascript
+docker run -u 0 -d -p 9090:8080 -p 50000:50000 -v /var/jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock --name jenkins jenkins/jenkins:lts
+```
+
+※ docker 설치 후 /var/run/docker.sock permission denied가 발생하는 경우
+
+```bash
+sudo chmod 666 /var/run/docker.sock
+```
+
+9090 포트 접속
+docker logs jenkins 입력 후 비밀번호 입력
+DashBoard > Manager Jenkins > Plugin Manager에서 gitlab, docker 검색 후 각각 상위 4개 항목 설치
+
+#### 3. Jenkins 컨테이너 안 도커 설치
+
+✔ Jenkins 컨테이너 접속
+
+```bash
+docker exec -it jenkins /bin/bash
+```
+
+✔ docker old version 제거
+
+```csharp
+apt-get remove docker docker-engine docker.io containerd runc
+```
+
+✔ 다음 명령어 차례로 입력
+
+```sql
+apt-get update
+apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update
+apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+```
+
+
+
+### Jenkins 프로젝트 생성 및 CI/CD 구축
+
+1. Jenkins 메인화면에서 '새로운 item' 클릭
+2. 이름 작성 및 Freestyle project 선택 후 OK
+3. 소스 코드 관리 > Git 선택
+4. 빌드 유발 > Build when a change is pushed to Gitlab. 선택 & Secret token > Generate 선택 후 key 복사
+5. Build Steps > Execute shell 선택
+6. 프로젝트 루트 폴더로 이동 후 Dockerfile 실행하는 쉘 스크립트 작성
+
+```bash
+# 프로젝트 루트로 이동이 필요한 경우
+cd ${PROJECT_ROOT}
+
+docker build -t ${CONTAINER_NAME} .
+docker run -d -p 포트번호:포트번호 ${CONTAINER_NAME} 
+```
+
+1. 빌드 후 조치 > Publish build status to GitLab 선택
+2. 맨 아래 저장 버튼 클릭
+3. GitLab에서 좌측 Settings > Webhooks
+4. 4번에 있는 webhook URL을 URL에 입력하고 복사해 둔 Secret token을 입력
+5. 프로젝트에 맞는 Trigger 설정 후 Add webhook 클릭
+6. 하단 Project Hooks에서 원하는 Trigger를 유발하여 테스트 가능
+
+
+
+### ngrok
+
+- 로컬이라면 다음과 같은 ngrok를 설정해야함
+
+1. ngrok [홈페이지](https://dashboard.ngrok.com/get-started/setup)에서 ngrok를 받음
+2. 알집을 풀고 실행
+3. 최초 한번만 계정과 연결을 함
+
+```
+ngrok authtoken [계정 생성후 발급받은 AuthToken]
+```
+
+4. 아래의 코드로 필요한 로컬포트의 도메인을 임시로 생성
+
+```
+ngrok http [원하는 서비스 포트]
+```
+
+> 아래는 예시
+
+![image-20230201004946593](./assets/image-20230201004946593.png)
+
+5. 임시 도메인 주소를 받았으면 저 주소로 Jenkins에 url 등록
+6. item의 상세 정보를 들어가서 WebHook url을 복사해서 저장
+7. GitLab의 경우 webhook에서 복사한 WebHook url을 사용하여 webhook을 만든다
+8. 테스트 빌드를 실행하면 끝
 
