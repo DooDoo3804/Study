@@ -252,12 +252,45 @@ docker stop react-frontend && docker rm react-frontend
 docker run -d -p 3000:3000 --name react-frontend doodoo3804/react-frontend
 ```
 
-### Spring Boot
+react의 도커 네트워크 안에서의 연동을 위해 proxy, url을 바꿔야함
 
-
-
-
-
-
+![image-20230206005526285](./assets/image-20230206005526285.png)
 
 ### MySQL
+
+```
+docker pull mysql
+docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=<비밀번호> --name <컨테이너 이름> --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+docker exec -it <컨테이너 이름>
+mysql -u root -p
+# root 계정으로 mysql 로그인
+```
+
+
+
+```mysql
+show databases;
+# db 확인
+use <database>;
+# 특정 db선택
+show tables;
+# 특정 db의 table 확인
+```
+
+
+
+**spring에서 initial data를 입력할 때 table이름을 소문자로 해야 한다.**
+
+### Spring Boot
+
+spring 에서 역시 db의 url을 바꿔줘야함
+
+- .properties
+
+```properties
+spring.datasource.url = jdbc:mysql://3.36.49.220:3306/inburger?useSSH=false
+# db 주소를 위와 같이 변경
+```
+
+### 
