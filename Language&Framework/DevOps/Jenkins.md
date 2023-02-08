@@ -293,4 +293,15 @@ spring.datasource.url = jdbc:mysql://3.36.49.220:3306/inburger?useSSH=false
 # db 주소를 위와 같이 변경
 ```
 
-### 
+jenins에서 maven 설치
+
+```
+apt-get update
+apt-get install maven
+
+apt-get install openjdk-17-jdk
+
+```
+
+global 설정에서 maven과 jdk 버전 설정
+
