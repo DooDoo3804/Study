@@ -305,3 +305,42 @@ apt-get install openjdk-17-jdk
 
 global 설정에서 maven과 jdk 버전 설정
 
+### Jenkins Excute shell
+
+```shell
+# websocket 서버
+cd front-end
+cd socket-io-server
+docker login -u doodoo3804 -p rlaehdbs11
+docker build -t doodoo3804/socket-server .
+docker push doodoo3804/socket-server
+docker stop socket-server && docker rm socket-server
+docker run -d -p 4001:4001 --name socket-server --network a203 doodoo3804/socket-server
+```
+
+```shell
+# 프론트
+cd front-end
+cd my-app
+docker login -u doodoo3804 -p rlaehdbs11
+docker build -t doodoo3804/react-frontend .
+docker push doodoo3804/react-frontend
+docker stop react-frontend && docker rm react-frontend
+docker run -d -p 3000:3000 --name react-frontend --network a203 doodoo3804/react-frontend
+```
+
+![image-20230209095726883](assets/image-20230209095726883.png)
+
+```shell
+# 백
+cd back-end
+cd backend
+docker login -u doodoo3804 -p rlaehdbs11
+docker build -t doodoo3804/spring-backend .
+docker push doodoo3804/spring-backend
+docker stop spring-backend && docker rm spring-backend
+docker run -d -p 8081:8081 --name spring-backend --network a203 doodoo3804/spring-backend
+# cd back-end
+# docker-compose up
+```
+
