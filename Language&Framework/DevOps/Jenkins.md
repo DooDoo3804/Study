@@ -344,3 +344,8 @@ docker run -d -p 8081:8081 --name spring-backend --network a203 doodoo3804/sprin
 # docker-compose up
 ```
 
+```shell
+# 현재 컨테이너에서 사용하지 않는 불필요한 이미지 모두 삭제
+docker images prune -a
+```
+
