@@ -259,7 +259,7 @@ react의 도커 네트워크 안에서의 연동을 위해 proxy, url을 바꿔�
 ### MySQL
 
 ```
-docker pull mysql
+ 	docker pull mysql
 docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=<비밀번호> --name <컨테이너 이름> --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
 docker exec -it <컨테이너 이름>
