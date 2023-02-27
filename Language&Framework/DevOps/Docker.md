@@ -71,6 +71,8 @@ exit
 
 
 
+### 
+
 
 
 
@@ -129,6 +131,16 @@ RUN <command>
 dockerfile 작성에 대한 문서는 다음을 참고
 
 http://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+
+## Docker build시 'none' 지워지지 않는 경우
+
+```shell
+# To remove all dangling Docker images:
+sudo docker rmi $(sudo docker images -f “dangling=true” -q)
+
+# If run as root omit "sudo"
+docker rmi $(docker images -f “dangling=true” -q)
+```
 
 
 
