@@ -130,3 +130,6 @@ int main(void)
 
 함수의 원형을 main앞에 정의 해야함
 
+# #include <algorithm>
+
+`#include <algorithm>`로 선언해줌
