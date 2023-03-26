@@ -133,3 +133,5 @@ int main(void)
 # #include <algorithm>
 
 `#include <algorithm>`로 선언해줌
+
+`sort` 등 을 사용할 수 있음
