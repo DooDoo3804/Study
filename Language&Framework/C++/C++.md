@@ -165,7 +165,27 @@ cin을 cout으로부터 untie 한다.
 >
 > 이를 가속화하기 위해 사용
 
+## string to int
+
+```c++
+string sub_num = "1"
+cout << stoi(sub_num);
+// 1 int로 출력
+```
 
 
 
+## 숫자 char 를 int로 변환
+
+```c++
+int('3') - '0';
+// int 3을 의미
+```
+
+char * 타입이라면 아래와 같이 가능
+
+```c++
+int num[1] = aoti('3');
+// char[N], char* 로 표현이 되는 문자열에서만 동작
+```
 
