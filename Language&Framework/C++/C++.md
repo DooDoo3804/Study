@@ -130,8 +130,42 @@ int main(void)
 
 함수의 원형을 main앞에 정의 해야함
 
-# #include <algorithm>
+# #include 
+
+## <algorithm>
 
 `#include <algorithm>`로 선언해줌
 
 `sort` 등 을 사용할 수 있음
+
+
+
+# Algorithm
+
+## ios::sync_with_stdio(0);
+
+```c++
+ios::sync_with_stdio(0);
+```
+
+싱글 스레드 환경에서만 사용. C 표준 stream과 C++ 표준 stream의 동기화를 끊음
+
+따라서 C의 버퍼가 사라져 버퍼의 수가 줄어들었기 때문에 속도가 빨라짐
+
+## cin.tie(0); cout.tie(0);
+
+```c++
+cin.tie(0);
+cout.tie(0);
+```
+
+cin을 cout으로부터 untie 한다.
+
+> cin cout이 scanf와 printf에 비해서 속도가 많이 느림
+>
+> 이를 가속화하기 위해 사용
+
+
+
+
+
