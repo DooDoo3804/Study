@@ -140,6 +140,20 @@ int main(void)
 
 
 
+## <vector>
+
+vector 사용 가능
+
+
+
+## <map>
+
+
+
+## <string>
+
+
+
 # Algorithm
 
 ## ios::sync_with_stdio(0);
@@ -189,3 +203,10 @@ int num[1] = aoti('3');
 // char[N], char* 로 표현이 되는 문자열에서만 동작
 ```
 
+## fill
+
+```c++
+fill(dp[0], dp[5000], -1);
+```
+
+fill 을 이용하면 배열, 다차원 배열도 같은 값으로 채울 수 있다.
