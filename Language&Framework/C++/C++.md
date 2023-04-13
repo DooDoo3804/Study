@@ -92,6 +92,32 @@ vector.resize(N)
 
 
 
+
+
+### set container
+
+노드 기반 컨테이너로 균형 이진트리로 구현
+
+Key라 불리는 원소들의 집합 / Key는 중복 안됨
+
+insert로 삽입이 되면 원소는 자동으로 정렬됨
+
+```c++
+// 선언
+set <int> s;
+
+s.begin();
+s.end();
+s.clear();
+s.count(k);
+s.empty();
+s.insert(k);
+// k 찾기 없으면 s.end() 반환
+s.find(k);
+// k key에 해당하는 value
+s[k];
+```
+
 # 함수
 
 ## 함수의 정의
@@ -228,21 +254,41 @@ void Book::Move(int page) { current_page_ = page; }
 
 
 
-## vector
-
-vector 사용 가능
-
-
-
-## map
-
-
-
 ## string
 
 
 
 # Algorithm
+
+## auto, auto&, auto*
+
+### auto
+
+초기화 값에 따라서 타입을 추런해서 결정해줌
+
+참조의 경우는 복사나 대입과 다르기 때문에 컴파일러가 알 수 없어서 참조로 받아지지 않음!!
+
+```c++
+int c = 0;
+for (auto tm : time_list) {
+    tm.second = c++;
+}
+```
+
+### auto& // auto*
+
+레퍼런스로 받을 수 있다
+
+복사보다 참조하여 사용하는 경우가 더 많음
+
+```c++
+int c = 0;
+for (auto& tm : time_list) {
+    tm.second = c++;
+}
+```
+
+
 
 ## using namespace
 
