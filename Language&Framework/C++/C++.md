@@ -369,3 +369,76 @@ fill(dp[0], dp[5000], -1);
 ```
 
 fill 을 이용하면 배열, 다차원 배열도 같은 값으로 채울 수 있다.
+
+## Dijkstra
+
+> 출발 노드와 도착 노드를 설정
+>
+> 최단 거리 테이블을 초기화
+>
+> 현재 위치한 노드의 인접 노드 중 방문하지 않은 노드를 구분하고, 방문하지 않은 노드 중 거리가 가장 짧은 노드를 선택한다. 그 노드를 방문 처리
+>
+> 해당 노드를 거쳐 다른 노드로 넘어가는 간선 비용을 계산해 '최단 거리 테이블'을 업데이트
+
+우선순위 큐를 통한 구현 (힙)
+
+```c++
+# define INF 999999999
+
+vector<int> dijkstra(int start, int N, vector<pair<int, int>> graph[])
+{
+    // 거리를 저장할 리스트 초기화
+    vector<int> dist(N, INF);
+    // 우선순의 큐 선언
+    priority_queue<pair<int, int>> pq;
+    
+    // 시작 노드 거리 0으로 초기화
+    dist[start] = 0;
+    // 우선순위 큐에 넣기
+    pq.push({0, start});
+    
+    while (!pq.empty()){
+        // 큐에서 꺼냐 방문하고 있는 정점의 거리
+        int cur_dist = -pq.top().first;
+        // 정점의 인덱스
+        int cur_node = pq.top().second;
+        pq.pop();
+        
+        for(int i = 0; i<graph[cur_node].size(); i++) {
+            // 인접 정점 번호
+            int nxt_node = graph[cur_node][i].first;
+            // 인접 정점까지 거리
+            int nxt_dist = cur_dist + graph[cur_node][i].second;
+            
+            // 지금 계산한 것이 기존 값보다 작다면
+            // 거리 업데이트 하고 우선순위 큐에 넣기
+            if (nxt_dist < dist[nxt_node]) {
+                dist[nxt_node] = nxt_dist;
+                pq.push({ -nxt_dist, nxt_node });
+            }
+        }
+    }
+    return dist;
+}
+
+int main() {
+    // 노드의 개수
+    const int N = 10;
+    // 간선의 개수
+    int E = 20;
+    vector<pair<int, int>> graph[N];
+    for (int i = 0; i < E; i++) {
+        // 시작점 끝점 가중치
+        int from, to, cost;
+        cin >> from >> to >> cost;
+        graph[from].push_back({ to, cost });
+        graph[to].push_back({ from, cost });
+    }
+    vector<int> dist = dijkstra(0, N, graph);
+    cout << dist[N-1];
+    return 0;
+}
+```
+
+
+

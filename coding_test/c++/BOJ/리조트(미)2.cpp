@@ -1,24 +1,32 @@
 #include <iostream>
 #include <algorithm>
+#include <vector>
+#include <algorithm>
+#include <map>
 
 using namespace std;
 
 int n;
-int dp[101][2] = {0};
+int dp[101][5];
+map<int, int> npos_day;
 
-int npos_days[101] = {0};
-int price_coupon[3][3] = {{10000, 0}, {25000, 1}, {37000, 2}};
-
-int check_min(int day, int coupon)
+int find_min(int day, int coupon)
 {
-
-    if (day == n + 1)
+    if (day >= n)
         return 0;
-    else if (npos_days[day] == 0)
+    else if (dp[day][coupon] != 1000000000)
+        return dp[day][coupon];
+    else if (npos_day[day] == 1)
+        return 0;
+    else
     {
-        if (dp[day][coupon] != 100000000)
-            return dp[day][coupon];
-        else if ()
+        int now = dp[day][coupon];
+        now = min(now, find_min(day + 1, coupon) + 10000);
+        now = min(now, find_min(day + 3, coupon + 1) + 25000);
+        now = min(now, find_min(day + 5, coupon + 2) + 37000);
+        if (coupon >= 3)
+            now = min(now, find_min(day + 1, coupon - 3));
+        return dp[day][coupon] = now;
     }
 }
 
@@ -28,22 +36,19 @@ int main()
     cin.tie(0);
     cout.tie(0);
 
-    int n;
     int m;
     cin >> n >> m;
 
+    fill(dp[0], dp[101], 1000000000);
+
     for (int i = 0; i < m; i++)
     {
-        int input_num = 0;
-        cin >> input_num;
-        npos_days[input_num] = 1;
+        int j;
+        cin >> j;
+        npos_day[j] = 1;
     }
 
-    fill(dp[0], dp[101], 100000000);
-
-    check_min(1, 0);
-
-    cout << dp[n];
+    find_min(1, 0);
 
     return 0;
 }
