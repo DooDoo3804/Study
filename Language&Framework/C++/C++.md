@@ -122,6 +122,25 @@ s[k];
 
 
 
+### queue
+
+```c++
+#include <queue>
+
+priority_queue<자료형, Container, 비교함수> 변수명;
+// 선언한 자료형 변수들을 비교함수에 따라 정렬하는 Priority_Queue를 선언
+priority_queue<자료형> 변수명;
+// 선언한 자료형 변수들을 내림차순에 따라 정렬하는 Priority_Queue를 선언
+.push();
+// 원소 삽입 이후 자동으로 정렬됨
+.pop();
+// 맨 앞에 있는 원소를 삭제
+```
+
+
+
+
+
 
 
 # 함수
@@ -251,6 +270,32 @@ void Book::Move(int page) { current_page_ = page; }
 ```
 
 하나의 클래스에서 생성된 인스턴스는 각각 독립된 메모리 공간에 저장된 자신만의 멤베 변수를 가지지만, 멤버 함수는 모든 인스턴스가 공유
+
+
+
+## pair 클래스
+
+> 서로 연관된 2개의 데이터 쌍을 묶어서 다룰 때 편리
+
+```c++
+pair<int, int> p;
+p.fisrt;
+// p의 첫번째 인자를 반환
+p.second;
+// p의 두번째 인자를 반환
+mape_pair(value1, value2);
+// 값1, 값2를 한쌍으로 하는 pair를 만들어서 반환
+```
+
+보통 vector와 함께 많이 사용한다
+
+pair는 대소를 할 경우 첫 번째를 먼저 비교하고 첫번 째 값이 같을 경우 두 번째로 판단
+
+```c++
+vector<pair<int, int>> p;
+```
+
+
 
 
 
@@ -398,13 +443,13 @@ vector<int> dijkstra(int start, int N, vector<pair<int, int>> graph[])
     pq.push({0, start});
     
     while (!pq.empty()){
-        // 큐에서 꺼냐 방문하고 있는 정점의 거리
+        // 큐에서 꺼내 방문하고 있는 정점의 거리
         int cur_dist = -pq.top().first;
         // 정점의 인덱스
         int cur_node = pq.top().second;
         pq.pop();
         
-        for(int i = 0; i<graph[cur_node].size(); i++) {
+        for(int i = 0; i < graph[cur_node].size(); i++) {
             // 인접 정점 번호
             int nxt_node = graph[cur_node][i].first;
             // 인접 정점까지 거리
