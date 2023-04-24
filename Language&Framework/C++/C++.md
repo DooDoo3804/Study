@@ -307,6 +307,54 @@ vector<pair<int, int>> p;
 
 `sort` 등 을 사용할 수 있음
 
+- next_permutation
+
+> 부분집합을 구할 때 사용
+
+```c++
+#include <iostream>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+	int n;
+	cin >> n;
+
+	for (int i = 0; i < n; i++) {
+		string input;
+		cin >> input;
+		sort(input.begin(), input.end());
+        // next_permutation 을 사용하여 부분집합을 구할 수 있음
+		while (next_permutation(input.begin(), input.end())) {
+			for (int j = 0; j < input.size(); j++) {
+				cout << input[j] << " ";
+			}
+			cout << "\n";
+		}
+	}
+	return 0;
+}
+```
+
+오름차순으로 정렬된 값을 가진 컨테이너로만 사용 가능함 / 즉, 사용 이전에 sort로 정렬을 해줘야 함
+
+기본값으로 오름차순으로 순열을 생성해 줌
+
+**중복이 있는 원소는 중복을 제외하고 순열을 만들어줌!!**
+
+
+
+
+
+
+
+
+
 
 
 ## string
