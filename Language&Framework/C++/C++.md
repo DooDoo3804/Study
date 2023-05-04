@@ -393,6 +393,22 @@ for (auto& tm : time_list) {
 
 
 
+## cout 소수점 출력
+
+```c++
+double ans = 123.4567;
+
+// 숫자 2개로 고정해서 출력
+// 이것만 쓰면 소수점과 관련이 없다
+cout.precision(2);
+
+// fixed를 쓰면 소수점을 고정하겠다는 의미
+// precision(2)가 위에 있으므로 소수점 2자리까지 반올림하여 출력해줌
+cout << fixed << ans
+```
+
+
+
 ## using namespace
 
 ```c++
