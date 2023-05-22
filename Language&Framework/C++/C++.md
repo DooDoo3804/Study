@@ -255,7 +255,59 @@ struct Friends
 
 
 
-# 함수 템플릿
+# 포인터
+
+메모리의 `주소값`을 저장하는 변수이며, 포인터 변수라고도 부름
+
+## 포인터 연산자
+
+### 주소 연산자 (&)
+
+변수의 이름 앞에 사용되며, 해당 변수의 주소값을 반환
+
+### 참조 연산자 (*)
+
+포인터의 이름이나 주소 앞에 사용하여, 포인터에 저장된 주소에 저장되어 있는 값을 반환
+
+```
+타입* 포인터이름;
+```
+
+초기화 하지 않으면 어딘지 모르는 메모리 장소에 값을 저장하므로 매우 위험한 행동, 포인터는 반드시 선언과 동시에 초기화 되어야함. 보통 NULL 로 초기화...?
+
+```c++
+타입* 포인터이름 = &변수이름;
+타입* 포인터이름 = &주소값;
+```
+
+선언된 포인터는 참조 연산자(*)를 사용해서 참조할 수 있음
+
+```c++
+int x = 7;            // 변수의 선언
+int *ptr = &x;      // 포인터의 선언
+int **pptr = &ptr; // 포인터의 참조
+```
+
+## 포인터 연산
+
+다음의 규칙을 따름
+
+1. 포인터 끼리의 덧셈, 곱셈, 나눗셈은 의미가 없음
+2. 포인터 끼리의 뺄셈은 두 포인터 사이의 상대적 거리를 나타냄
+3. 포인터에 정수를 더하거나 뺼 수는 있지만, 실수와의 연산은 허용하지 않음
+4. 포인터끼리 대입하거나 비교할 수 있음
+
+### 포인터와 배열
+
+어떤 부분에서는 서로를 대체할 수 있음
+
+배열의 크기를 계산할 때에는 배열의 이름과 포인터 사이에 큰 차이가 발생
+
+배열의 이름을 이용한 크기 계산에서는 배열의 크기가 int형 배열 요소 3개의 크기인 12바이트로 제대로 출력
+
+포인터를 이용한 크기 계산에서는 배열의 크기가 아닌 포인터 변수 자체의 크기가 출력된는 차이가 있음
+
+
 
 
 
@@ -549,5 +601,73 @@ int main() {
 }
 ```
 
+## Segment Tree
+
+주어진 쿼리에 대해 빠르게 응답하기 위해 만들어진 자료구조
+
+### 1) 세그먼트 트리의 전체 크기
+
+```
+<<크기가 N인 배열이 있다면>>
+트리의 높이 - ceil(log2(N))
+세그먼트 트리의 크기 - 1 << (트리의 높이 + 1)
+```
+
+### 2) 트리 만들기
+
+> 세그먼트 트리는 full binary tree에 가깝기에 배열에 모든 값들이 꽉차서 올가능성이 매우 높기 때문에 포인터보다는 배열을 사용하여 생성
+
+루트 노드 = 1로 생각
+
+이때 루트 노드의 왼쪽은 2번, 오른쪽은 3번이 된다.
+
+2번 노드의 왼쪽은 4번, 오른쪽은 5번이 된다.
+
+3번  노드의 왼쪽은 6번, 오른쪽은 7번인 된다. ,,,
+
+```
+<<현재 노드의 번호가 node일 때>>
+노드의 왼쪽 자식 배열 번호 : node * 2
+노드의 오른쪽 자식 배열 번호 : node * + 1
+```
+
+tree 배열은 세그먼트 트리가 만들어지는 배열
+
+arr 배열은 처음에 입력받아 생성된 배열
+
+#### 1. 초기화 과정(init)
+
+```c++
+long long init(vector<long long> &arr, vector<long long> &tree, int node, int start, int end) {
+    if (start == end) return tree[node] = arr[start];
+    int mid = (end + start) / 2;
+    return tree[node] = init(arr, tree, node * 2, start, mid) + init(arr, tree, node * 2 + 1, mid + 1, end);
+}
+```
 
 
+
+#### 2. 갱신 과정 (update)
+
+```c++
+void update(vector<long long> &tree, int node, int start, int end, int index, long long diff) {
+    if (!(start <= index && index <= end)) return;
+    tree[node] += diff;
+    if (start != end) {
+        int mid = (start + end) / 2;
+        update(tree, node * 2, start, mid, index, diff);
+        update(tree, node * 2 + 1, mid + 1, end, index, diff);
+    }
+}
+```
+
+#### 3. 합 과정(sum)
+
+```c++
+long long sum(vector<long long> &tree, int node, int start, int end, int left, int right) {
+    if (left > end || right < start) return 0;
+    if (left <= start && end <= right) return tree[node];
+    int mid = (start + end) / 2;
+    return sum(tree, node * 2, start, mid, left, right) + sum(tree, node * 2 + 1, mid + 1, left, right);
+}
+```
