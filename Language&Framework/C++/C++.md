@@ -61,7 +61,7 @@ const int ages = 30;
 
 > Vector / deque / list / foward_list
 
-### 1) Vector
+###  Vector
 
 > Array의 경우 크기가 고정되어 있어 원소를 추가하거나 삭제가 불가능하다. Vector는 요소가 추가되거나 삭제될 때마다 자동으로 메모리를 재할당하여 크기를 동적으로 변경
 
@@ -90,11 +90,7 @@ vector.resize(N)
 */
 ```
 
-
-
-
-
-### set container
+### Set
 
 노드 기반 컨테이너로 균형 이진트리로 구현
 
@@ -103,6 +99,7 @@ Key라 불리는 원소들의 집합 / Key는 중복 안됨
 insert로 삽입이 되면 원소는 자동으로 정렬됨
 
 ```c++
+
 // 선언
 set <int> s;
 
@@ -118,9 +115,15 @@ s.find(k);
 s[k];
 ```
 
-### Stack
+### map
 
+```c++
+#include<map>
+map<key type, value type> 이름;
+// 위와 같이 선언
+```
 
+만약 중복된 키의 값이 존재한다면 `insert`가 실행되지 않는다.
 
 ### queue
 
@@ -137,7 +140,7 @@ priority_queue<자료형> 변수명;
 // 맨 앞에 있는 원소를 삭제
 ```
 
-
+### Stack
 
 
 
